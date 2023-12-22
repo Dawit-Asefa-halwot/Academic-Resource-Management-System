@@ -53,7 +53,7 @@ public class AcademicResourceManagementSystem {
                         switch (scheduleType) {
                             case 1:
                                 // Display Class Schedule
-
+                                viewClassScheduleForStudent(connection);
                                 break;
 
                             case 2:
@@ -146,4 +146,26 @@ public class AcademicResourceManagementSystem {
             }
         }
     }
+
+    private static void viewClassScheduleForStudent(Connection connection) throws SQLException {
+        // Implement logic to retrieve and display class schedule for students from the database
+        // Use PreparedStatement to execute queries
+        String selectClassScheduleQuery = "SELECT subject, days, class_time FROM class_schedule";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectClassScheduleQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            System.out.println("Class Schedule:");
+            if (!resultSet.isBeforeFirst()) {
+                System.out.println("No class schedule found.");
+            } else {
+                System.out.printf("%-15s %-15s %-15s%n", "Subject", "Days", "Class Time");
+                while (resultSet.next()) {
+                    String subject = resultSet.getString("subject");
+                    String classDate = resultSet.getString("days");
+                    String classTime = resultSet.getString("class_time");
+                    System.out.printf("%-15s %-15s %-15s%n", subject, classDate, classTime);
+                }
+            }
+        }
+    }
+
 }
