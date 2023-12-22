@@ -44,6 +44,27 @@ public class AcademicResourceManagementSystem {
                         registerStudent(connection, username, password);
                         System.out.println("Registration successful!");
                         break;
+
+
+
+                    case 2:
+                        // See Schedule for Student
+                        System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\nEnter your choice:");
+                        int scheduleType = scanner.nextInt();
+
+                        switch (scheduleType) {
+                            case 1:
+                                // Display Class Schedule
+                                viewClassScheduleForStudent(connection);
+                                break;
+
+                            case 2:
+                                // Display Assignment Schedule (implement logic)
+                                System.out.println("Assignment Schedule functionality is not implemented yet.");
+                                break;
+
+
+
                 }
 
             }
