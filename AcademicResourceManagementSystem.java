@@ -34,6 +34,18 @@ public class AcademicResourceManagementSystem {
                 System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\nEnter your choice:");
                 int studentChoice = scanner.nextInt();
 
+                switch (studentChoice) {
+                    case 1:
+                        // Register Student
+                        System.out.println("Student Registration - Enter your username:");
+                        username = scanner.next();
+                        System.out.println("Enter your password:");
+                        String password = scanner.next();
+                        registerStudent(connection, username, password);
+                        System.out.println("Registration successful!");
+                        break;
+                }
+
             }
 
 
@@ -68,6 +80,15 @@ public class AcademicResourceManagementSystem {
 
 
 
+    }
+    private static void registerStudent(Connection connection, String username, String password) throws SQLException {
+        String insertUserQuery = "INSERT INTO users (username, password, role) VALUES (?, ?, 'student')";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertUserQuery)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.executeUpdate();
+            System.out.println("Student registration successful!");
+        }
     }
 
 
