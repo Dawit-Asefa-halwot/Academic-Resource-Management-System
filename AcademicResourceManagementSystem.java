@@ -59,6 +59,7 @@ public class AcademicResourceManagementSystem {
                             case 2:
                                 // Display Assignment Schedule (implement logic)
 
+                                viewAssignmentScheduleForStudent(connection);
                                 System.out.println("Assignment Schedule functionality is not implemented yet.");
                                 break;
 
@@ -165,6 +166,30 @@ public class AcademicResourceManagementSystem {
                     System.out.printf("%-15s %-15s %-15s%n", subject, classDate, classTime);
                 }
             }
+        }
+    }
+    private static void viewAssignmentScheduleForStudent(Connection connection) {
+        try {
+            // Perform a SELECT query to retrieve assignment schedule from the database
+            String query = "SELECT * FROM Assignment_Schedule";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                // Display the assignment schedule in a table form
+                System.out.printf("%-15s %-15s %-15s%n", "Subject", "Start Date", "Deadline");
+                System.out.println("--------------------------------------------------");
+
+                while (resultSet.next()) {
+                    String subject = resultSet.getString("subject");
+                    String startDate = resultSet.getString("start_date");
+                    String deadline = resultSet.getString("deadline");
+
+                    System.out.printf("%-15s %-15s %-15s%n", subject, startDate, deadline);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error fetching assignment schedule");
         }
     }
 
