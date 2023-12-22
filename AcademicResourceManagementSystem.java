@@ -112,8 +112,9 @@ public class AcademicResourceManagementSystem {
 
                             case 3:
                                 // Upload Exam Schedule
-
+                                uploadExamSchedule(connection);
                                 break;
+
 
 
                             default:
@@ -165,6 +166,49 @@ public class AcademicResourceManagementSystem {
                     System.out.printf("%-15s %-15s %-15s%n", subject, classDate, classTime);
                 }
             }
+        }
+    }
+
+
+
+    private static void uploadExamSchedule(Connection connection) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Get input from the user
+            System.out.println("Enter subject:");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter exam name:");
+            String examName = scanner.nextLine();
+
+            System.out.println("Enter exam date (yyyy-MM-dd):");
+            String examDateStr = scanner.nextLine();
+            LocalDate examDate = LocalDate.parse(examDateStr);
+
+            System.out.println("Enter exam time:");
+            String examTime = scanner.nextLine();
+
+            // Prepare and execute SQL statement to insert data into exam_schedule table
+            String insertQuery = "INSERT INTO exam_schedule (subject, exam_name, exam_date, exam_time) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setString(2, examName);
+                preparedStatement.setDate(3, Date.valueOf(examDate));
+                preparedStatement.setString(4, examTime);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Exam schedule uploaded successfully.");
+                } else {
+                    System.out.println("Failed to upload exam schedule.");
+                }
+            }
+        } catch (SQLException | DateTimeParseException e) {
+            e.printStackTrace();
+            System.out.println("Error uploading exam schedule.");
+        } finally {
+            scanner.close();
         }
     }
 
