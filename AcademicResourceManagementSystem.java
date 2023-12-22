@@ -29,6 +29,28 @@ public class AcademicResourceManagementSystem {
             System.out.println("Are you a student or a teacher? Enter 'student' or 'teacher':");
             String userType = scanner.nextLine();
 
+            if ("student".equalsIgnoreCase(userType)) {
+                // Student Functionality
+                System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\nEnter your choice:");
+                int studentChoice = scanner.nextInt();
+
+            }
+
+
+
+            else if ("teacher".equalsIgnoreCase(userType)) {
+                // Teacher Functionality
+                System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\nEnter your choice:");
+                int teacherChoice = scanner.nextInt();
+
+            }
+
+
+            else {
+                System.out.println("Invalid user type");
+            }
+
+
 
 
 
