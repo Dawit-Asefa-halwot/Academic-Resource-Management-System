@@ -385,7 +385,28 @@ public class AcademicResourceManagementSystem {
             }
         }
     }
+    private static void viewMaterials(Connection connection) {
+        // Implement logic to retrieve and display materials from the database
+        String selectMaterialsQuery = "SELECT subject, material_name FROM materials";
 
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectMaterialsQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            System.out.println("Materials:");
+            System.out.printf("%-15s  %-15s%n", "Material Name             ", "Subject");
+            System.out.println("------------------------------------------------------");
+
+            while (resultSet.next()) {
+                String materialName = resultSet.getString("material_name");
+                String subject = resultSet.getString("subject");
+
+                System.out.printf("%-15s  %-15s%n", materialName, subject);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error retrieving materials from the database");
+        }
+    }
 
 
 }
