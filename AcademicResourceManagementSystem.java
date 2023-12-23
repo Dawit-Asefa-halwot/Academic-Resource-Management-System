@@ -317,8 +317,20 @@ public class AcademicResourceManagementSystem {
         }
     }
 
+//checking for student existence
+    private static boolean isStudentExists(Connection connection, String username) throws SQLException {
+        String checkUserQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND role = 'student'";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(checkUserQuery)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt("count");
+                return count > 0;
+            }
+        }
+    }
 
-
+    //uploading class schedule for student
     private static void uploadClassSchedule(Connection connection) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Enter the subject:");
