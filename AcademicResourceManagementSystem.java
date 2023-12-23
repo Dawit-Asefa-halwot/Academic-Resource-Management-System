@@ -8,8 +8,7 @@ import java.util.Scanner;
 
 public class AcademicResourceManagementSystem {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/university_system";
-    // private static final String DB_USER = "root";
-    // private static final String DB_PASSWORD = "1234";
+
     private static Connection connection;
     private static Scanner scanner = new Scanner(System.in);
 
