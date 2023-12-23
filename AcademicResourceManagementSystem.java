@@ -57,35 +57,61 @@ public class AcademicResourceManagementSystem {
                         System.out.println("Registration successful!");
                         break;
 
-
                     case 2:
                         // See Schedule for Student
-                        System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\nEnter your choice:");
-                        int scheduleType = scanner.nextInt();
+                        boolean scheduleExit = false;
 
-                        switch (scheduleType) {
-                            case 1:
-                                // Display Class Schedule
-                                viewClassScheduleForStudent(connection);
-                                break;
+                        while (!scheduleExit) {
+                            System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Back\nEnter your choice:");
 
-                            case 2:
-                                // Display Assignment Schedule (implement logic)
+                            int scheduleType = 0;
+                            boolean validScheduleChoice = false;
 
-                                viewAssignmentScheduleForStudent(connection);
-                                System.out.println("Assignment Schedule functionality is not implemented yet.");
-                                break;
+                            do {
+                                if (scanner.hasNextInt()) {
+                                    scheduleType = scanner.nextInt();
 
-                            case 3:
-                                // Display Exam Schedule
+                                    if (scheduleType >= 1 && scheduleType <= 4) {
+                                        validScheduleChoice = true;
+                                    } else {
+                                        System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                                    }
+                                } else {
+                                    System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                                    scanner.next(); // Clear the invalid input from the scanner
+                                }
+                            } while (!validScheduleChoice);
 
-                                viewExamScheduleForStudent(connection);
+                            switch (scheduleType) {
+                                case 1:
+                                    // Display Class Schedule
+                                    viewClassScheduleForStudent(connection);
+                                    break;
 
-                                break;
+                                case 2:
+                                    // Display Assignment Schedule (implement logic)
+                                    viewAssignmentScheduleForStudent(connection);
+                                    System.out.println("Assignment Schedule functionality is not implemented yet.");
+                                    break;
 
-                            default:
-                                System.out.println("Invalid choice");
+                                case 3:
+                                    // Display Exam Schedule (implement logic)
+                                    viewExamScheduleForStudent(connection);
+
+                                    break;
+
+                                case 4:
+                                    // Go back
+                                    scheduleExit = true;
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice");
+                            }
                         }
+
+
+
                         break;
 
                     case 3:
