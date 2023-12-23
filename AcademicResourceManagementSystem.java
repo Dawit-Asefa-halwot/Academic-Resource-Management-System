@@ -17,7 +17,6 @@ public class AcademicResourceManagementSystem {
         String username = null;  // Declare the username variable outside the block
 
         try {
-            //connection = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASSWORD);
             System.out.println("Enter database username:");
             String dbUser = scanner.nextLine();
 
@@ -118,6 +117,7 @@ public class AcademicResourceManagementSystem {
                         // See Grade
                         System.out.println("Enter your username:");
                         username = scanner.next();
+                        viewGradesForStudent(connection, username);
 
                         break;
 
@@ -276,6 +276,45 @@ public class AcademicResourceManagementSystem {
             System.out.println("Error uploading exam schedule.");
         } finally {
             scanner.close();
+        }
+    }
+
+    private static void viewGradesForStudent(Connection connection, String studentUsername) {
+        try {
+            // Check if the student username exists in the users table
+            if (isStudentExists(connection, studentUsername)) {
+                // Display grades for the specified student
+                System.out.println("Grades for Student " + studentUsername + ":");
+
+                // List of subjects
+                List<String> subjects = List.of("data_structure", "oop_java", "statistics", "coa", "networking", "operating_system");
+
+                // Display header
+                System.out.printf("%-20s %-10s %-10s%n", "Subject", "Mark", "Grade");
+                System.out.println("--------------------------------------------");
+
+                for (String subject : subjects) {
+                    // Display grades for each subject
+                    displayGrades(connection, studentUsername, subject);
+                }
+            } else {
+                System.out.println("Student with the username " + studentUsername + " not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error retrieving grades from the database");
+        }
+    }
+
+    private static boolean isStudentExists(Connection connection, String username) throws SQLException {
+        String checkUserQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND role = 'student'";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(checkUserQuery)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt("count");
+                return count > 0;
+            }
         }
     }
 
