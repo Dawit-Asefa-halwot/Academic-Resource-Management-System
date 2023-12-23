@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class AcademicResourceManagementSystem {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/university_system";
-
+    //database connection
     private static Connection connection;
     private static Scanner scanner = new Scanner(System.in);
 
@@ -44,7 +44,6 @@ public class AcademicResourceManagementSystem {
                 // Student Functionality
                 System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\nEnter your choice:");
                 int studentChoice = scanner.nextInt();
-
                 switch (studentChoice) {
                     case 1:
                         System.out.println("Student Registration - Enter your username:");
@@ -129,55 +128,60 @@ public class AcademicResourceManagementSystem {
                     default:
                         System.out.println("Invalid choice");
                 }
-            } else if ("teacher".equalsIgnoreCase(userType)) {
-                // Teacher Functionality
-                System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\nEnter your choice:");
-                int teacherChoice = scanner.nextInt();
 
-
-                switch (teacherChoice) {
-                    case 1:
-                        // Upload Schedule
-                        System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\nEnter your choice:");
-                        int scheduleChoice = scanner.nextInt();
-
-                        switch (scheduleChoice) {
-                            case 1:
-                                // Upload Class Schedule
-                                uploadClassSchedule(connection);
-
-                                break;
-
-                            case 2:
-                                // Upload Assignment Schedule
-                                uploadAssignmentSchedule(connection);
-                                break;
-
-                            case 3:
-                                // Upload Exam Schedule
-                                uploadExamSchedule(connection);
-                                break;
-
-                            default:
-                                System.out.println("Invalid choice");
-                        }
-                        break;
-
-                    case 2:
-                        // Upload Grade
-                        uploadGrade(connection);
-                        break;
-
-                    case 3:
-                        uploadMaterial(connection);
-                        break;
-
-                    default:
-                        System.out.println("Invalid choice");
-                }
-            } else {
-                System.out.println("Invalid user type");
             }
+            else if ("teacher".equalsIgnoreCase(userType)) {
+                // Teacher Functionality
+                System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4.exit\nEnter your choice:");
+                int teacherChoice = scanner.nextInt();
+           do {
+               teacherChoice=getTeacherChoice(scanner);
+
+               switch (teacherChoice) {
+                   case 1:
+                       // Upload Schedule
+                       System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n4.exit\nEnter your choice:");
+                       int scheduleChoice = scanner.nextInt();
+                   do{
+                       scheduleChoice=getScheduleChoice(scanner);
+                       switch (scheduleChoice) {
+                           case 1:
+                               // Upload Class Schedule
+                               uploadClassSchedule(connection);
+
+                               break;
+
+                           case 2:
+                               // Upload Assignment Schedule
+                               uploadAssignmentSchedule(connection);
+                               break;
+
+                           case 3:
+                               // Upload Exam Schedule
+                               uploadExamSchedule(connection);
+                               break;
+
+                           default:
+                               System.out.println("Invalid choice");
+                       }
+                   }while (scheduleChoice !=4);
+                       break;
+
+                   case 2:
+                       // Upload Grade
+                       uploadGrade(connection);
+                       break;
+
+                   case 3:
+                       uploadMaterial(connection);
+                       break;
+
+                   default:
+                       System.out.println("Invalid choice");
+               }
+           }while (teacherChoice !=4);}else{
+                    System.out.println("Invalid user type");
+           }
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Database connection error");
@@ -188,6 +192,7 @@ public class AcademicResourceManagementSystem {
             }
         }
     }
+
 
     private static void viewClassScheduleForStudent(Connection connection) throws SQLException {
         // Implement logic to retrieve and display class schedule for students from the database
@@ -209,6 +214,29 @@ public class AcademicResourceManagementSystem {
             }
         }
     }
+        private static int getTeacherChoice(Scanner scanner) {
+            while (true) {
+
+                try {
+                    // Try to parse the input as an integer
+                    return Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("re-enter your choice");
+                }
+            }
+
+    }private static int getScheduleChoice(Scanner scanner){
+            while (true) {
+
+                try {
+                    // Try to parse the input as an integer
+                    return Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("re-enter your choice");
+                }
+            }
+        }
+
     private static void viewAssignmentScheduleForStudent(Connection connection) {
         try {
             // Perform a SELECT query to retrieve assignment schedule from the database
