@@ -30,7 +30,17 @@ public class AcademicResourceManagementSystem {
             System.out.println("----------------------------------------------------------------");
             System.out.println("Are you a student or a teacher?");
             System.out.print("==>>");
-            String userType = scanner.nextLine();
+            String userType;
+            boolean validUserType = false;
+            do {
+                userType = scanner.nextLine();
+
+                if ("student".equalsIgnoreCase(userType) || "teacher".equalsIgnoreCase(userType)) {
+                    validUserType = true;
+                } else {
+                    System.out.println("Invalid user type. Please Re-enter 'student' or 'teacher'.");
+                }
+            } while (!validUserType);
 
             if ("student".equalsIgnoreCase(userType)) {
                 // Student Functionality
