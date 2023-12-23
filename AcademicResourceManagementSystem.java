@@ -407,6 +407,21 @@ public class AcademicResourceManagementSystem {
             System.out.println("Error retrieving materials from the database");
         }
     }
+    private static boolean isGradeExists(Connection connection, String subject, String studentUsername) {
+        String checkGradeQuery = "SELECT COUNT(*) AS count FROM " + subject + " WHERE student_username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery)) {
+            preparedStatement.setString(1, studentUsername);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt("count");
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error checking if grade exists");
+            return false;  // Return false in case of an error
+        }
+    }
     private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
         // Query to get grades for the specified student and subject
         String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
