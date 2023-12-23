@@ -17,7 +17,6 @@ public class AcademicResourceManagementSystem {
         String username = null;  // Declare the username variable outside the block
 
         try {
-            //connection = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASSWORD);
             System.out.println("Enter database username:");
             String dbUser = scanner.nextLine();
 
@@ -25,9 +24,22 @@ public class AcademicResourceManagementSystem {
             String dbPassword = scanner.nextLine();
 
             connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC MANAGEMENT SYSTEM!");
+            System.out.println("----------------------------------------------------------------");
+            System.out.println("Are you a student or a teacher?");
+            System.out.print("==>>");
+            String userType;
+            boolean validUserType = false;
+            do {
+                userType = scanner.nextLine();
 
-            System.out.println("Are you a student or a teacher? Enter 'student' or 'teacher':");
-            String userType = scanner.nextLine();
+                if ("student".equalsIgnoreCase(userType) || "teacher".equalsIgnoreCase(userType)) {
+                    validUserType = true;
+                } else {
+                    System.out.println("Invalid user type. Please Re-enter 'student' or 'teacher'.");
+                }
+            } while (!validUserType);
 
             if ("student".equalsIgnoreCase(userType)) {
                 // Student Functionality
@@ -36,47 +48,76 @@ public class AcademicResourceManagementSystem {
 
                 switch (studentChoice) {
                     case 1:
-                        // Register Student
                         System.out.println("Student Registration - Enter your username:");
                         username = scanner.next();
                         System.out.println("Enter your password:");
                         String password = scanner.next();
-
+                        registerStudent(connection, username, password);
                         System.out.println("Registration successful!");
                         break;
 
                     case 2:
                         // See Schedule for Student
-                        System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\nEnter your choice:");
-                        int scheduleType = scanner.nextInt();
+                        boolean scheduleExit = false;
 
-                        switch (scheduleType) {
-                            case 1:
-                                // Display Class Schedule
-                                viewClassScheduleForStudent(connection);
-                                break;
+                        while (!scheduleExit) {
+                            System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Back\nEnter your choice:");
 
-                            case 2:
-                                // Display Assignment Schedule (implement logic)
+                            int scheduleType = 0;
+                            boolean validScheduleChoice = false;
 
-                                viewAssignmentScheduleForStudent(connection);
-                                System.out.println("Assignment Schedule functionality is not implemented yet.");
-                                break;
+                            do {
+                                if (scanner.hasNextInt()) {
+                                    scheduleType = scanner.nextInt();
 
-                            case 3:
-                                // Display Exam Schedule
+                                    if (scheduleType >= 1 && scheduleType <= 4) {
+                                        validScheduleChoice = true;
+                                    } else {
+                                        System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                                    }
+                                } else {
+                                    System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                                    scanner.next(); // Clear the invalid input from the scanner
+                                }
+                            } while (!validScheduleChoice);
 
-                                break;
+                            switch (scheduleType) {
+                                case 1:
+                                    // Display Class Schedule
+                                    viewClassScheduleForStudent(connection);
+                                    break;
 
-                            default:
-                                System.out.println("Invalid choice");
+                                case 2:
+                                    // Display Assignment Schedule (implement logic)
+                                    viewAssignmentScheduleForStudent(connection);
+                                    System.out.println("Assignment Schedule functionality is not implemented yet.");
+                                    break;
+
+                                case 3:
+                                    // Display Exam Schedule (implement logic)
+                                    viewExamScheduleForStudent(connection);
+
+                                    break;
+
+                                case 4:
+                                    // Go back
+                                    scheduleExit = true;
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice");
+                            }
                         }
+
+
+
                         break;
 
                     case 3:
                         // See Grade
                         System.out.println("Enter your username:");
                         username = scanner.next();
+                        viewGradesForStudent(connection, username);
 
                         break;
 
@@ -103,18 +144,20 @@ public class AcademicResourceManagementSystem {
                         switch (scheduleChoice) {
                             case 1:
                                 // Upload Class Schedule
+                                uploadClassSchedule(connection);
 
                                 break;
 
                             case 2:
                                 // Upload Assignment Schedule
-
+                                uploadAssignmentSchedule(connection);
                                 break;
 
                             case 3:
                                 // Upload Exam Schedule
-
+                                uploadExamSchedule(connection);
                                 break;
+
 
 
                             default:
@@ -128,7 +171,7 @@ public class AcademicResourceManagementSystem {
                         break;
 
                     case 3:
-
+                        uploadMaterial(connection);
                         break;
 
                     default:
@@ -192,5 +235,300 @@ public class AcademicResourceManagementSystem {
             System.out.println("Error fetching assignment schedule");
         }
     }
+
+
+
+    private static void uploadExamSchedule(Connection connection) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Get input from the user
+            System.out.println("Enter subject:");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter exam name:");
+            String examName = scanner.nextLine();
+
+            System.out.println("Enter exam date (yyyy-MM-dd):");
+            String examDateStr = scanner.nextLine();
+            LocalDate examDate = LocalDate.parse(examDateStr);
+
+            System.out.println("Enter exam time:");
+            String examTime = scanner.nextLine();
+
+            // Prepare and execute SQL statement to insert data into exam_schedule table
+            String insertQuery = "INSERT INTO exam_schedule (subject, exam_name, exam_date, exam_time) VALUES (?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setString(2, examName);
+                preparedStatement.setDate(3, Date.valueOf(examDate));
+                preparedStatement.setString(4, examTime);
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Exam schedule uploaded successfully.");
+                } else {
+                    System.out.println("Failed to upload exam schedule.");
+                }
+            }
+        } catch (SQLException | DateTimeParseException e) {
+            e.printStackTrace();
+            System.out.println("Error uploading exam schedule.");
+        } finally {
+            scanner.close();
+        }
+    }
+
+    private static void viewGradesForStudent(Connection connection, String studentUsername) {
+        try {
+            // Check if the student username exists in the users table
+            if (isStudentExists(connection, studentUsername)) {
+                // Display grades for the specified student
+                System.out.println("Grades for Student " + studentUsername + ":");
+
+                // List of subjects
+                List<String> subjects = List.of("data_structure", "oop_java", "statistics", "coa", "networking", "operating_system");
+
+                // Display header
+                System.out.printf("%-20s %-10s %-10s%n", "Subject", "Mark", "Grade");
+                System.out.println("--------------------------------------------");
+
+                for (String subject : subjects) {
+                    // Display grades for each subject
+                    displayGrades(connection, studentUsername, subject);
+                }
+            } else {
+                System.out.println("Student with the username " + studentUsername + " not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error retrieving grades from the database");
+        }
+    }
+
+    private static boolean isStudentExists(Connection connection, String username) throws SQLException {
+        String checkUserQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND role = 'student'";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(checkUserQuery)) {
+            preparedStatement.setString(1, username);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt("count");
+                return count > 0;
+            }
+        }
+    }
+
+
+    private static void viewExamScheduleForStudent(Connection connection) {
+        try {
+//        // Perform a SELECT query to retrieve exam schedule from the database
+            String query = "SELECT * FROM exam_schedule";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+
+//            // Display the exam schedule in a table form
+                System.out.printf("%-15s %-15s %-15s %-15s%n", "Subject", "Exam Name", "Exam Date", "Exam Time");
+                System.out.println("-----------------------------------------------------------");
+
+                while (resultSet.next()) {
+                    String subject = resultSet.getString("subject");
+                    String examName = resultSet.getString("exam_name");
+                    String examDate = resultSet.getString("exam_date");
+                    String examTime = resultSet.getString("exam_time");
+
+                    System.out.printf("%-15s %-15s %-15s %-15s%n", subject, examName, examDate, examTime);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error fetching exam schedule");
+        }
+    }
+
+
+    private static void registerStudent(Connection connection, String username, String password) throws SQLException {
+        String insertUserQuery = "INSERT INTO users (username, password, role) VALUES (?, ?, 'student')";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertUserQuery)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            preparedStatement.executeUpdate();
+            System.out.println("Student registration successful!");
+        }
+    }
+
+
+
+    private static void uploadClassSchedule(Connection connection) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Enter the subject:");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter the class days :");
+            String classDate = scanner.next();
+
+            System.out.println("Enter the class time (HH:mm:ss):");
+            String classTime = scanner.next();
+
+
+// Store class schedule in the database
+            String insertClassScheduleQuery = "INSERT INTO class_schedule (subject, days, class_time, user_id) VALUES (?, ?, ?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertClassScheduleQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setString(2, classDate);
+                preparedStatement.setString(3, classTime);
+                // Assuming you have a user_id for the teacher, replace 1 with the actual user_id
+                preparedStatement.setInt(4, 1);
+                preparedStatement.executeUpdate();
+                System.out.println("Class schedule uploaded successfully!");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error uploading class schedule to the database");
+            }
+        }
+    }
+
+
+
+    private static void uploadAssignmentSchedule(Connection connection) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Get input from the user
+            System.out.println("Enter subject:");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter start date (yyyy-MM-dd):");
+            String startDateStr = scanner.nextLine();
+            LocalDate startDate = LocalDate.parse(startDateStr);
+
+            System.out.println("Enter deadline (yyyy-MM-dd):");
+            String deadlineStr = scanner.nextLine();
+            LocalDate deadline = LocalDate.parse(deadlineStr);
+
+            // Prepare and execute SQL statement to insert data into Assignment_Schedule table
+            String insertQuery = "INSERT INTO Assignment_Schedule (subject, start_date, deadline) VALUES (?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setDate(2, Date.valueOf(startDate));
+                preparedStatement.setDate(3, Date.valueOf(deadline));
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Assignment schedule uploaded successfully.");
+                } else {
+                    System.out.println("Failed to upload assignment schedule.");
+                }
+            }
+        } catch (SQLException | DateTimeParseException e) {
+            e.printStackTrace();
+            System.out.println("Error uploading assignment schedule.");
+        } finally {
+            scanner.close();
+        }
+    }
+
+    private static void uploadMaterial(Connection connection) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Enter the subject:");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter the material name:");
+            String materialName = scanner.nextLine();
+
+            // Store material in the database
+            String insertMaterialQuery = "INSERT INTO materials (subject, material_name) VALUES (?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertMaterialQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setString(2, materialName);
+                preparedStatement.executeUpdate();
+                System.out.println("Material uploaded successfully!");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error uploading material to the database");
+            }
+        }
+    }
+    private static void viewMaterials(Connection connection) {
+        // Implement logic to retrieve and display materials from the database
+        String selectMaterialsQuery = "SELECT subject, material_name FROM materials";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectMaterialsQuery);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            System.out.println("Materials:");
+            System.out.printf("%-15s  %-15s%n", "Material Name             ", "Subject");
+            System.out.println("------------------------------------------------------");
+
+            while (resultSet.next()) {
+                String materialName = resultSet.getString("material_name");
+                String subject = resultSet.getString("subject");
+
+                System.out.printf("%-15s  %-15s%n", materialName, subject);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error retrieving materials from the database");
+        }
+    }
+    private static boolean isGradeExists(Connection connection, String subject, String studentUsername) {
+        String checkGradeQuery = "SELECT COUNT(*) AS count FROM " + subject + " WHERE student_username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery)) {
+            preparedStatement.setString(1, studentUsername);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                int count = resultSet.getInt("count");
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error checking if grade exists");
+            return false;  // Return false in case of an error
+        }
+    }
+
+    private static String calculateGrade(double mark) {
+        if (mark < 0 || mark > 100) {
+            return "Your mark should be between 0 and 100. Please re-enter.";
+        } else if (mark >= 90) {
+            return "A+";
+        } else if (mark >= 85) {
+            return "A";
+        } else if (mark >= 80) {
+            return "A-";
+        } else if (mark >= 75) {
+            return "B+";
+        } else if (mark >= 70) {
+            return "B";
+        } else if (mark >= 65) {
+            return "C+";
+        } else if (mark >= 60) {
+            return "C";
+        } else if (mark >= 55) {
+            return "C-";
+        } else if (mark >= 50) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
+    private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
+        // Query to get grades for the specified student and subject
+        String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectGradesQuery)) {
+            preparedStatement.setString(1, studentUsername);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    double mark = resultSet.getDouble("mark");
+                    String grade = resultSet.getString("grade");
+                    System.out.printf("%-20s %-10s %-10s%n", subject, mark, grade);
+                }
+            }
+        }
+    }
+
 
 }
