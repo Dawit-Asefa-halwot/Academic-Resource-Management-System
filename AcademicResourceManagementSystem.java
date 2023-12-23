@@ -42,8 +42,10 @@ public class AcademicResourceManagementSystem {
 
             if ("student".equalsIgnoreCase(userType)) {
                 // Student Functionality
-                System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\nEnter your choice:");
+                System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\n5.exit\nEnter your choice:");
                 int studentChoice = scanner.nextInt();
+             do{
+                 studentChoice=getStudentChoice(scanner);
                 switch (studentChoice) {
                     case 1:
                         System.out.println("Student Registration - Enter your username:");
@@ -129,7 +131,7 @@ public class AcademicResourceManagementSystem {
                         System.out.println("Invalid choice");
                 }
 
-            }
+            }while (studentChoice !=5);}
             else if ("teacher".equalsIgnoreCase(userType)) {
                 // Teacher Functionality
                 System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4.exit\nEnter your choice:");
@@ -224,18 +226,31 @@ public class AcademicResourceManagementSystem {
                     System.out.println("re-enter your choice");
                 }
             }
+    }
+             private static int getStudentChoice(Scanner scanner){
+                while (true) {
 
-    }private static int getScheduleChoice(Scanner scanner){
-            while (true) {
-
-                try {
-                    // Try to parse the input as an integer
-                    return Integer.parseInt(scanner.nextLine());
-                } catch (NumberFormatException e) {
-                    System.out.println("re-enter your choice");
+                    try {
+                        // Try to parse the input as an integer
+                        return Integer.parseInt(scanner.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.println("re-enter your choice");
+                    }
                 }
             }
-        }
+
+
+            private static int getScheduleChoice(Scanner scanner){
+                    while (true) {
+
+                        try {
+                            // Try to parse the input as an integer
+                            return Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("re-enter your choice");
+                        }
+                    }
+                }
 
     private static void viewAssignmentScheduleForStudent(Connection connection) {
         try {
