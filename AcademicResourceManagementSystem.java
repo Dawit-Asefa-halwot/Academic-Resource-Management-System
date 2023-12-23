@@ -135,7 +135,7 @@ public class AcademicResourceManagementSystem {
                         break;
 
                     case 3:
-
+                        uploadMaterial(connection);
                         break;
 
                     default:
@@ -353,7 +353,28 @@ public class AcademicResourceManagementSystem {
         }
     }
 
+    private static void uploadMaterial(Connection connection) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Enter the subject:");
+            String subject = scanner.nextLine();
 
+            System.out.println("Enter the material name:");
+            String materialName = scanner.nextLine();
+
+            // Store material in the database
+            String insertMaterialQuery = "INSERT INTO materials (subject, material_name) VALUES (?, ?)";
+
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertMaterialQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setString(2, materialName);
+                preparedStatement.executeUpdate();
+                System.out.println("Material uploaded successfully!");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Error uploading material to the database");
+            }
+        }
+    }
 
 
 
