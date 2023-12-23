@@ -407,6 +407,21 @@ public class AcademicResourceManagementSystem {
             System.out.println("Error retrieving materials from the database");
         }
     }
+    private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
+        // Query to get grades for the specified student and subject
+        String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectGradesQuery)) {
+            preparedStatement.setString(1, studentUsername);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    double mark = resultSet.getDouble("mark");
+                    String grade = resultSet.getString("grade");
+                    System.out.printf("%-20s %-10s %-10s%n", subject, mark, grade);
+                }
+            }
+        }
+    }
 
 
 }
