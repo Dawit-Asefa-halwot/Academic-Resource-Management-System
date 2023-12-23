@@ -1,0 +1,102 @@
+[33mcommit adc8e382659fb9f92ff930eb65d44c4b82240f9b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Dawit-Asefa <adawit473@gmail.com>
+Date:   Sat Dec 23 09:55:33 2023 +0300
+
+    adding upload assignment-schedule functionality
+
+[33mcommit 5c3493b9eda927011c1f56c712b26cc1671c6a2e[m
+Author: Dawit-Asefa <adawit473@gmail.com>
+Date:   Sat Dec 23 09:41:29 2023 +0300
+
+    adding upload class schedule functionality
+
+[33mcommit 0e461e893d453297f713ae715531b26af1186678[m
+Author: Dawit-Asefa <adawit473@gmail.com>
+Date:   Sat Dec 23 09:22:26 2023 +0300
+
+    adding register student functionality
+
+[33mcommit 66daf2acb31f38831ce0c4ae3011dd3b4880f755[m
+Author: Dawit-Asefa <adawit473@gmail.com>
+Date:   Sat Dec 23 09:13:03 2023 +0300
+
+    adding some that should available in the project
+
+[33mcommit 3c0e4bdc3bb9c08bccc9675e82f4ec3748ab1552[m
+Merge: 429e716 98bb3e0
+Author: Dawit-asefa <adawit473@gmail.com>
+Date:   Fri Dec 22 23:59:31 2023 +0300
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit 429e716215c06f5fdf1a708f17ba262c98c3b39f[m
+Author: Dawit-asefa <adawit473@gmail.com>
+Date:   Fri Dec 22 23:58:32 2023 +0300
+
+    adding uplod exam schedule functionality
+
+[33mcommit 98bb3e00250dc9a2fc067580d6d5a0f1f4d081ac[m
+Author: abdime <129440664+abdime@users.noreply.github.com>
+Date:   Fri Dec 22 23:56:53 2023 +0300
+
+    functionality of viewAssignmentScheduleForStudent  is added
+
+[33mcommit c5bede1d079326d8423580d7d804c5a8f5c58d64[m
+Author: abdime <129440664+abdime@users.noreply.github.com>
+Date:   Fri Dec 22 23:46:03 2023 +0300
+
+    class schedule functionality is added
+
+[33mcommit e0f135ac34bf07416c795b60b8601a29f9dadd86[m
+Author: Dawit-asefa <adawit473@gmail.com>
+Date:   Fri Dec 22 23:23:13 2023 +0300
+
+    adding some that should available in the project
+
+[33mcommit 1508ffc495e91157f91d6ab5b11f4c1bea0a4f1c[m
+Author: Daniel <132162880+Danny44466@users.noreply.github.com>
+Date:   Fri Dec 22 21:51:35 2023 +0300
+
+    no change just check
+
+[33mcommit 2e3f6e7cc0bb54fa456a48df5bbe6d0f8e1c67f9[m
+Author: Daniel <132162880+Danny44466@users.noreply.github.com>
+Date:   Fri Dec 22 21:49:33 2023 +0300
+
+    no change just check
+
+[33mcommit 072aa1be66b61e47cee8abc4405645cc5f127adf[m
+Author: Dawit-asefa <adawit473@gmail.com>
+Date:   Fri Dec 22 21:39:41 2023 +0300
+
+    adding  assignment schedule case
+
+[33mcommit a713a8fbd8b8ea42d313bc710cb0f00d43e586e7[m
+Author: abdime <129440664+abdime@users.noreply.github.com>
+Date:   Fri Dec 22 21:07:31 2023 +0300
+
+    Register Student
+
+[33mcommit 4e3e794ae6a5274f52ef8afa53130a8b800ce200[m
+Author: abdime <129440664+abdime@users.noreply.github.com>
+Date:   Fri Dec 22 20:51:53 2023 +0300
+
+    code structure
+
+[33mcommit 6da2b21ce9ebc605534632294fedfe2d5ae4620e[m
+Author: abdime <129440664+abdime@users.noreply.github.com>
+Date:   Fri Dec 22 17:55:47 2023 +0300
+
+    database setup
+
+[33mcommit c149cb30c3b3a3be049289721da5f8ebf8d65073[m
+Author: abdime <129440664+abdime@users.noreply.github.com>
+Date:   Fri Dec 22 14:56:11 2023 +0300
+
+    new import added
+
+[33mcommit a025d2c6cbfaf433670635dffc4347b96c729a64[m
+Author: Dawit-Asefa <140062090+Dawit-asefa@users.noreply.github.com>
+Date:   Tue Dec 19 18:02:10 2023 +0300
+
+    Initial commit
