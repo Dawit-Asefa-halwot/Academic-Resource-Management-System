@@ -66,6 +66,8 @@ public class AcademicResourceManagementSystem {
                             case 3:
                                 // Display Exam Schedule
 
+                                viewExamScheduleForStudent(connection);
+
                                 break;
 
                             default:
@@ -236,5 +238,37 @@ public class AcademicResourceManagementSystem {
             scanner.close();
         }
     }
+
+
+    private static void viewExamScheduleForStudent(Connection connection) {
+        try {
+//        // Perform a SELECT query to retrieve exam schedule from the database
+            String query = "SELECT * FROM exam_schedule";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+                 ResultSet resultSet = preparedStatement.executeQuery()) {
+
+//            // Display the exam schedule in a table form
+                System.out.printf("%-15s %-15s %-15s %-15s%n", "Subject", "Exam Name", "Exam Date", "Exam Time");
+                System.out.println("-----------------------------------------------------------");
+
+                while (resultSet.next()) {
+                    String subject = resultSet.getString("subject");
+                    String examName = resultSet.getString("exam_name");
+                    String examDate = resultSet.getString("exam_date");
+                    String examTime = resultSet.getString("exam_time");
+
+                    System.out.printf("%-15s %-15s %-15s %-15s%n", subject, examName, examDate, examTime);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error fetching exam schedule");
+        }
+    }
+
+
+
+
+
 
 }
