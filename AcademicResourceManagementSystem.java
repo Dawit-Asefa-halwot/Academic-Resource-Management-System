@@ -25,7 +25,7 @@ public class AcademicResourceManagementSystem {
 
             connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC MANAGEMENT SYSTEM!");
+            System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC RESOURCE MANAGEMENT SYSTEM!");
             System.out.println("----------------------------------------------------------------");
             System.out.println("Are you a student or a teacher?");
             System.out.print("==>>");
@@ -43,121 +43,94 @@ public class AcademicResourceManagementSystem {
 
             if ("student".equalsIgnoreCase(userType)) {
                 // Student Functionality
+                System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\nEnter your choice:");
+                int studentChoice = scanner.nextInt();
 
+                switch (studentChoice) {
+                    case 1:
+                        System.out.println("Student Registration - Enter your username:");
+                        username = scanner.next();
+                        System.out.println("Enter your password:");
+                        String password = scanner.next();
+                        registerStudent(connection, username, password);
+                        System.out.println("Registration successful!");
+                        break;
 
-                boolean exit = false;
+                    case 2:
+                        // See Schedule for Student
+                        boolean scheduleExit = false;
 
-                while (!exit) {
-                    System.out.println("1. To Register\n2. To See Schedule\n3. To See Your Grade\n4. To See Materials\n5. Exit\nEnter your choice:");
+                        while (!scheduleExit) {
+                            System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Back\nEnter your choice:");
 
-                    int studentChoice = 0;
-                    boolean validChoice = false;
+                            int scheduleType = 0;
+                            boolean validScheduleChoice = false;
 
-                    do {
-                        if (scanner.hasNextInt()) {
-                            studentChoice = scanner.nextInt();
+                            do {
+                                if (scanner.hasNextInt()) {
+                                    scheduleType = scanner.nextInt();
 
-                            if (studentChoice >= 1 && studentChoice <= 5) {
-                                validChoice = true;
-                            } else {
-                                System.out.println("Invalid choice. Please enter a number between 1 and 5.");
-                            }
-                        } else {
-                            System.out.println("Invalid input. Please enter a number between 1 and 5.");
-                            scanner.next(); // Clear the invalid input from the scanner
-                        }
-                    } while (!validChoice);
-
-                    switch (studentChoice) {
-                        case 1:
-                            // Register Student
-                            System.out.println("\tSTUDENTS REGISTRATION IS ONGOING...\n***************************************** \nEnter your username:");
-                            username = scanner.next();
-                            System.out.println("Enter your password:");
-                            String password = scanner.next();
-                            registerStudent(connection, username, password);
-                            System.out.println("\tYou have been registered successfully!");
-                            break;
-
-                        case 2:
-                            // See Schedule for Student
-                            boolean scheduleExit = false;
-
-                            while (!scheduleExit) {
-                                System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Back\nEnter your choice:");
-
-                                int scheduleType = 0;
-                                boolean validScheduleChoice = false;
-
-                                do {
-                                    if (scanner.hasNextInt()) {
-                                        scheduleType = scanner.nextInt();
-
-                                        if (scheduleType >= 1 && scheduleType <= 4) {
-                                            validScheduleChoice = true;
-                                        } else {
-                                            System.out.println("Invalid choice. Please enter a number between 1 and 4.");
-                                        }
+                                    if (scheduleType >= 1 && scheduleType <= 4) {
+                                        validScheduleChoice = true;
                                     } else {
-                                        System.out.println("Invalid input. Please enter a number between 1 and 4.");
-                                        scanner.next(); // Clear the invalid input from the scanner
+                                        System.out.println("Invalid choice. Please enter a number between 1 and 4.");
                                     }
-                                } while (!validScheduleChoice);
-
-                                switch (scheduleType) {
-                                    case 1:
-                                        // Display Class Schedule
-                                        viewClassScheduleForStudent(connection);
-                                        break;
-
-                                    case 2:
-                                        // Display Assignment Schedule (implement logic)
-                                        viewAssignmentScheduleForStudent(connection);
-                                        System.out.println("Assignment Schedule functionality is not implemented yet.");
-                                        break;
-
-                                    case 3:
-                                        // Display Exam Schedule (implement logic)
-                                        viewExamScheduleForStudent(connection);
-
-                                        break;
-
-                                    case 4:
-                                        // Go back
-                                        scheduleExit = true;
-                                        break;
-
-                                    default:
-                                        System.out.println("Invalid choice");
+                                } else {
+                                    System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                                    scanner.next(); // Clear the invalid input from the scanner
                                 }
+                            } while (!validScheduleChoice);
+
+                            switch (scheduleType) {
+                                case 1:
+                                    // Display Class Schedule
+                                    viewClassScheduleForStudent(connection);
+                                    break;
+
+                                case 2:
+                                    // Display Assignment Schedule (implement logic)
+                                    viewAssignmentScheduleForStudent(connection);
+                                    System.out.println("Assignment Schedule functionality is not implemented yet.");
+                                    break;
+
+                                case 3:
+                                    // Display Exam Schedule (implement logic)
+                                    viewExamScheduleForStudent(connection);
+
+                                    break;
+
+                                case 4:
+                                    // Go back
+                                    scheduleExit = true;
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice");
                             }
-                            break;
+                        }
 
-                        case 3:
-                            // See Grade
-                            System.out.println("Enter your username:");
-                            username = scanner.next();
-                            viewGradesForStudent(connection, username);
-                            break;
 
-                        case 4:
-                            // See Material
-                            viewMaterials(connection);
-                            break;
 
-                        case 5:
-                            // Exit the student functionality
-                            exit = true;
-                            break;
+                        break;
 
-                        default:
-                            System.out.println("Invalid choice");
-                    }
+                    case 3:
+                        // See Grade
+                        System.out.println("Enter your username:");
+                        username = scanner.next();
+                        viewGradesForStudent(connection, username);
+
+                        break;
+
+                    case 4:
+                        // See Material
+                        viewMaterials(connection);
+
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice");
                 }
-            }
-
-
-            else if ("teacher".equalsIgnoreCase(userType)) {
+            } else if ("teacher".equalsIgnoreCase(userType)) {
                 // Teacher Functionality
                 System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\nEnter your choice:");
                 int teacherChoice = scanner.nextInt();
@@ -186,8 +159,6 @@ public class AcademicResourceManagementSystem {
                                 uploadExamSchedule(connection);
                                 break;
 
-
-
                             default:
                                 System.out.println("Invalid choice");
                         }
@@ -195,7 +166,7 @@ public class AcademicResourceManagementSystem {
 
                     case 2:
                         // Upload Grade
-
+                        uploadGrade(connection);
                         break;
 
                     case 3:
@@ -515,6 +486,97 @@ public class AcademicResourceManagementSystem {
             return false;  // Return false in case of an error
         }
     }
+
+    private static void uploadGrade(Connection connection) {
+        try (Scanner scanner = new Scanner(System.in)) {
+            String subject;
+            String studentUsername;
+
+            // Continue asking for input until "exit" is entered
+            while (true) {
+                System.out.println("Enter the subject (type 'exit' to finish):");
+                subject = scanner.next();
+
+                if ("exit".equalsIgnoreCase(subject)) {
+                    break; // Exit the loop if "exit" is entered
+                }
+
+                System.out.println("Enter the student username:");
+                studentUsername = scanner.next();
+
+                try {
+                    if (isStudentExists(connection, studentUsername)) {
+                        // Store grade in the database
+                        System.out.println("Enter the grade:");
+                        double mark = scanner.nextDouble();
+
+                        // Move the consumption of the newline character here
+                        scanner.nextLine();
+
+                        uploadGradeToDatabase(connection, subject, studentUsername, mark);
+                        // Print the message only once after successful grade upload
+                        // System.out.println("Grade uploaded successfully!");
+                    } else {
+                        System.out.println("Student with the username " + studentUsername + " not found.");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.out.println("Error checking if student exists");
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid value.");
+                    // Move the consumption of the newline character here
+                    scanner.nextLine();
+                }
+            }
+        }
+    }
+
+
+    private static void uploadGradeToDatabase(Connection connection, String subject, String studentUsername, double mark) {
+        try {
+            // Check if the grade already exists for the same username and subject
+            if (isGradeExists(connection, subject, studentUsername)) {
+                // Update the existing grade
+                updateGrade(connection, subject, studentUsername, mark);
+                System.out.println("Grade updated successfully!");
+            } else {
+                // Calculate grade based on the provided criteria
+                String grade = calculateGrade(mark);
+
+                // Store grade in the respective subject table
+                String insertGradeQuery = "INSERT INTO " + subject + " (subject_name, student_username, mark, grade) VALUES (?, ?, ?, ?)";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(insertGradeQuery)) {
+                    preparedStatement.setString(1, subject);
+                    preparedStatement.setString(2, studentUsername);
+                    preparedStatement.setDouble(3, mark);
+                    preparedStatement.setString(4, grade);
+                    preparedStatement.executeUpdate();
+                    System.out.println("Grade uploaded successfully!");
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.out.println("Error checking/updating grade in the database");
+        }
+    }
+
+    private static void updateGrade(Connection connection, String subject, String studentUsername, double mark) {
+        // Calculate grade based on the provided criteria
+        String grade = calculateGrade(mark);
+
+        // Update the grade in the respective subject table
+        String updateGradeQuery = "UPDATE " + subject + " SET mark = ?, grades = ? WHERE student_username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(updateGradeQuery)) {
+            preparedStatement.setDouble(1, mark);
+            preparedStatement.setString(2, grade);
+            preparedStatement.setString(3, studentUsername);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error updating grade in the database");
+        }
+    }
+
 
     private static String calculateGrade(double mark) {
         if (mark < 0 || mark > 100) {
