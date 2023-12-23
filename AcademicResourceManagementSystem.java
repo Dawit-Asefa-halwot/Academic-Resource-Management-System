@@ -422,6 +422,33 @@ public class AcademicResourceManagementSystem {
             return false;  // Return false in case of an error
         }
     }
+
+    private static String calculateGrade(double mark) {
+        if (mark < 0 || mark > 100) {
+            return "Your mark should be between 0 and 100. Please re-enter.";
+        } else if (mark >= 90) {
+            return "A+";
+        } else if (mark >= 85) {
+            return "A";
+        } else if (mark >= 80) {
+            return "A-";
+        } else if (mark >= 75) {
+            return "B+";
+        } else if (mark >= 70) {
+            return "B";
+        } else if (mark >= 65) {
+            return "C+";
+        } else if (mark >= 60) {
+            return "C";
+        } else if (mark >= 55) {
+            return "C-";
+        } else if (mark >= 50) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
     private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
         // Query to get grades for the specified student and subject
         String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
