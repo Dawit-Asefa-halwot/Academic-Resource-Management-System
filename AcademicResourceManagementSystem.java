@@ -111,7 +111,7 @@ public class AcademicResourceManagementSystem {
 
                             case 2:
                                 // Upload Assignment Schedule
-
+                                uploadAssignmentSchedule(connection);
                                 break;
 
                             case 3:
@@ -309,6 +309,48 @@ public class AcademicResourceManagementSystem {
             }
         }
     }
+
+
+
+    private static void uploadAssignmentSchedule(Connection connection) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Get input from the user
+            System.out.println("Enter subject:");
+            String subject = scanner.nextLine();
+
+            System.out.println("Enter start date (yyyy-MM-dd):");
+            String startDateStr = scanner.nextLine();
+            LocalDate startDate = LocalDate.parse(startDateStr);
+
+            System.out.println("Enter deadline (yyyy-MM-dd):");
+            String deadlineStr = scanner.nextLine();
+            LocalDate deadline = LocalDate.parse(deadlineStr);
+
+            // Prepare and execute SQL statement to insert data into Assignment_Schedule table
+            String insertQuery = "INSERT INTO Assignment_Schedule (subject, start_date, deadline) VALUES (?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+                preparedStatement.setString(1, subject);
+                preparedStatement.setDate(2, Date.valueOf(startDate));
+                preparedStatement.setDate(3, Date.valueOf(deadline));
+
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Assignment schedule uploaded successfully.");
+                } else {
+                    System.out.println("Failed to upload assignment schedule.");
+                }
+            }
+        } catch (SQLException | DateTimeParseException e) {
+            e.printStackTrace();
+            System.out.println("Error uploading assignment schedule.");
+        } finally {
+            scanner.close();
+        }
+    }
+
+
 
 
 
