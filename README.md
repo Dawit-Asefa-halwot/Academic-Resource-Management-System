@@ -14,6 +14,27 @@ MySQL Server
 MySQL Connector/J (JDBC Driver)
 
 How to Run
+## How to Use
+
+1) Database Setup
+To set up the database for the project, use the  SQL code we provided:
+-- Create tables for users, class schedules, exam schedules,
+   assignment schedules, and materials (see attached code for the complete SQL setup).
+
+2. Run the project using a Java Virtual Machine (JVM).
+3. Follow the on-screen instructions to log in or register as a new user.
+4. Once logged in, you can access various features such as:
+   - Viewing your schedule
+   - Viewing grades
+   - Viewing materials
+   - Uploading schedules (teachers only)
+   - Uploading grades (teachers only)
+   - Uploading materials (teachers only)
+
+## Notes
+- This project is a command-line application.
+- The provided code require additional development such as workbench username and password to implement all features.
+- The project uses a relational database (MySQL) to store data.
 
 Ensure that the MySQL Server is running and accessible.
 Set up the database by executing the SQL scripts provided in the database_scripts folder.
