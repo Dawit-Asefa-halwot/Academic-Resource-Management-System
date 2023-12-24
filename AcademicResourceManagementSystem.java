@@ -689,18 +689,22 @@ public class AcademicResourceManagementSystem
     }
 
     // a method that update grade
-    private static void updateGrade(Connection connection, String subject, String studentUsername, double mark) {
+    private static void updateGrade(Connection connection, String subject, String studentUsername, double mark)
+    {
         // Calculate grade based on the provided criteria
         String grade = calculateGrade(mark);
 
         // Update the grade in the respective subject table
         String updateGradeQuery = "UPDATE " + subject + " SET mark = ?, grades = ? WHERE student_username = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(updateGradeQuery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(updateGradeQuery))
+        {
             preparedStatement.setDouble(1, mark);
             preparedStatement.setString(2, grade);
             preparedStatement.setString(3, studentUsername);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             // Use System.err to print the error message to the error stream
             System.err.println("Error updating grade in the database: " + e.getMessage());
 
@@ -712,40 +716,66 @@ public class AcademicResourceManagementSystem
 
 
     // a method that calculate student grade
-    private static String calculateGrade(double mark) {
-        if (mark < 0 || mark > 100) {
+    private static String calculateGrade(double mark)
+    {
+        if (mark < 0 || mark > 100)
+        {
             return "Your mark should be between 0 and 100. Please re-enter.";
-        } else if (mark >= 90) {
+        }
+        else if (mark >= 90)
+        {
             return "A+";
-        } else if (mark >= 85) {
+        }
+        else if (mark >= 85)
+        {
             return "A";
-        } else if (mark >= 80) {
+        }
+        else if (mark >= 80)
+        {
             return "A-";
-        } else if (mark >= 75) {
+        }
+        else if (mark >= 75)
+        {
             return "B+";
-        } else if (mark >= 70) {
+        }
+        else if (mark >= 70)
+        {
             return "B";
-        } else if (mark >= 65) {
+        }
+        else if (mark >= 65)
+        {
             return "C+";
-        } else if (mark >= 60) {
+        }
+        else if (mark >= 60)
+        {
             return "C";
-        } else if (mark >= 55) {
+        }
+        else if (mark >= 55)
+        {
             return "C-";
-        } else if (mark >= 50) {
+        }
+        else if (mark >= 50)
+        {
             return "D";
-        } else {
+        }
+        else
+        {
             return "F";
         }
     }
     // method that display student grade
-    private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
+    private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException
+    {
         // Query to get grades for the specified student and subject
         String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(selectGradesQuery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(selectGradesQuery))
+        {
             preparedStatement.setString(1, studentUsername);
 
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
+            try (ResultSet resultSet = preparedStatement.executeQuery())
+            {
+                while (resultSet.next())
+                {
                     double mark = resultSet.getDouble("mark");
                     String grade = resultSet.getString("grade");
                     System.out.printf("%-20s %-10s %-10s%n", subject, mark, grade);
