@@ -8,10 +8,8 @@ import java.util.Scanner;
 
 public class AcademicResourceManagementSystem {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/university_system";
-    // private static final String DB_USER = "root";
-    // private static final String DB_PASSWORD = "1234";
-    private static Connection connection;
-    private static Scanner scanner = new Scanner(System.in);
+
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         String username = null;  // Declare the username variable outside the block
@@ -23,7 +21,7 @@ public class AcademicResourceManagementSystem {
             System.out.println("Enter database password:");
             String dbPassword = scanner.nextLine();
 
-            connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
+            Connection connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC RESOURCE MANAGEMENT SYSTEM!");
             System.out.println("----------------------------------------------------------------");
@@ -184,9 +182,7 @@ public class AcademicResourceManagementSystem {
             System.out.println("Database connection error");
         } finally {
             // Close the scanner in the finally block to ensure it's always closed
-            if (scanner != null) {
-                scanner.close();
-            }
+            scanner.close();
         }
     }
 
@@ -300,10 +296,14 @@ public class AcademicResourceManagementSystem {
                 System.out.println("Student with the username " + studentUsername + " not found.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error retrieving grades from the database");
+            // Use System.err to print the error message to the error stream
+            System.err.println("Error retrieving grades from the database: " + e.getMessage());
+
+            // Print the stack trace to standard error stream
+            e.printStackTrace(System.err);
         }
     }
+
 
     private static boolean isStudentExists(Connection connection, String username) throws SQLException {
         String checkUserQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND role = 'student'";
@@ -320,12 +320,12 @@ public class AcademicResourceManagementSystem {
 
     private static void viewExamScheduleForStudent(Connection connection) {
         try {
-//        // Perform a SELECT query to retrieve exam schedule from the database
+            // Perform a SELECT query to retrieve exam schedule from the database
             String query = "SELECT * FROM exam_schedule";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query);
                  ResultSet resultSet = preparedStatement.executeQuery()) {
 
-//            // Display the exam schedule in a table form
+                // Display the exam schedule in a table form
                 System.out.printf("%-15s %-15s %-15s %-15s%n", "Subject", "Exam Name", "Exam Date", "Exam Time");
                 System.out.println("-----------------------------------------------------------");
 
@@ -339,8 +339,11 @@ public class AcademicResourceManagementSystem {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error fetching exam schedule");
+            // Use System.err to print the error message to the error stream
+            System.err.println("Error fetching exam schedule: " + e.getMessage());
+
+            // Print the stack trace to standard error stream
+            e.printStackTrace(System.err);
         }
     }
 
@@ -368,8 +371,7 @@ public class AcademicResourceManagementSystem {
             System.out.println("Enter the class time (HH:mm:ss):");
             String classTime = scanner.next();
 
-
-// Store class schedule in the database
+            // Store class schedule in the database
             String insertClassScheduleQuery = "INSERT INTO class_schedule (subject, days, class_time, user_id) VALUES (?, ?, ?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertClassScheduleQuery)) {
@@ -381,11 +383,16 @@ public class AcademicResourceManagementSystem {
                 preparedStatement.executeUpdate();
                 System.out.println("Class schedule uploaded successfully!");
             } catch (SQLException e) {
-                e.printStackTrace();
+                // Use System.err to print the error message to the error stream
+                System.err.println("Error uploading class schedule to the database: " + e.getMessage());
+
+                // Print the stack trace to standard error stream
+                e.printStackTrace(System.err);
                 System.out.println("Error uploading class schedule to the database");
             }
         }
     }
+
 
 
 
@@ -472,7 +479,7 @@ public class AcademicResourceManagementSystem {
         }
     }
 
-    // mehod that check if grade exit or not
+    // method that check if grade exit or not
     private static boolean isGradeExists(Connection connection, String subject, String studentUsername) {
         String checkGradeQuery = "SELECT COUNT(*) AS count FROM " + subject + " WHERE student_username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery)) {
