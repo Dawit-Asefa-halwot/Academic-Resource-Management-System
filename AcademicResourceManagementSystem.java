@@ -54,7 +54,7 @@ public class AcademicResourceManagementSystem
                     {
                         validUserType = true;
                     }
-                    else
+                     else
                     {
                         System.out.println("Invalid user type. Please Re-enter 'student' or 'teacher'.");
                     }
@@ -79,7 +79,7 @@ public class AcademicResourceManagementSystem
 
                         studentChoice = scanner.nextInt();
 
-                        // giving choices for student
+                                // giving choices for student
                         switch (studentChoice)
                         {
                             case 1:
@@ -96,7 +96,7 @@ public class AcademicResourceManagementSystem
                                 registerStudent(connection, username, password);
                                 break;
 
-                            // See Schedule for Student
+                                   // See Schedule for Student
                             case 2:
 
                                 boolean scheduleExit = false;
@@ -104,7 +104,7 @@ public class AcademicResourceManagementSystem
                                 //checking the existence of schedule
                                 while (!scheduleExit)
                                 {
-                                    System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Exit\n");
+                                    System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Exit\nEnter your choice:");
                                     System.out.println("Enter your choice");
                                     System.out.print(">>");
 
@@ -187,44 +187,30 @@ public class AcademicResourceManagementSystem
                         }
                     }
                 }
-                else if ("teacher".equalsIgnoreCase(userType))
-                {
+                else if ("teacher".equalsIgnoreCase(userType)) {
                     // Teacher Functionality
                     int teacherChoice = 0;
 
-                    while (teacherChoice != 4)
-                    {
-                        System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4. Exit\n");
-                        System.out.println("Enter your choice:");
-                        System.out.print(">>");
+                    while (teacherChoice != 4) {
+                        System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4. Exit\nEnter your choice:");
 
                         while (!scanner.hasNextInt()) {
                             System.out.println("Invalid choice. Please enter a number.");
-
-                            // Clear the invalid input from the scanner
-                            scanner.next();
+                            scanner.next(); // Clear the invalid input from the scanner
                         }
 
                         teacherChoice = scanner.nextInt();
 
-                        //teacher choices
-
-                        switch (teacherChoice)
-                        {
+                        switch (teacherChoice) {
                             case 1:
                                 // Upload Schedule
                                 int scheduleChoice = 0;
 
-                                //checking teacher choices existence
-                                while (scheduleChoice != 4)
-                                {
-                                    System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n4. Exit");
-                                    System.out.println("Enter your choice:");
-                                    System.out.print(">>");
+                                while (scheduleChoice != 4) {
+                                    System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n4. Exit\nEnter your choice:");
 
                                     while (!scanner.hasNextInt()) {
                                         System.out.println("Invalid choice. Please enter a number.");
-                                        System.out.print(">>");
                                         scanner.next(); // Clear the invalid input from the scanner
                                     }
 
@@ -273,31 +259,24 @@ public class AcademicResourceManagementSystem
                                 System.out.println("Invalid choice");
                         }
                     }
-                }
-                else
-                {
+                } else {
                     System.out.println("Invalid user type");
                 }
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 loginAttempts++;
                 System.out.println("Invalid username or password. Please try again.");
 
-                if (loginAttempts >= MAX_LOGIN_ATTEMPTS)
-                {
+                if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
                     System.out.println("Maximum login attempts reached. Exiting...");
                     System.exit(0);
                 }
             }
-        }
-        while (loginAttempts < MAX_LOGIN_ATTEMPTS);
+        } while (loginAttempts < MAX_LOGIN_ATTEMPTS);
 
         // Close the scanner in the finally block to ensure it's always closed
         scanner.close();
     }
 
-    //viewing class schedule for students
     private static void viewClassScheduleForStudent(Connection connection) throws SQLException {
         // Implement logic to retrieve and display class schedule for students from the database
         // Use PreparedStatement to execute queries
