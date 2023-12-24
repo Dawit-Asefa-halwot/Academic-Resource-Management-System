@@ -471,6 +471,8 @@ public class AcademicResourceManagementSystem {
             System.out.println("Error retrieving materials from the database");
         }
     }
+
+    // mehod that check if grade exit or not
     private static boolean isGradeExists(Connection connection, String subject, String studentUsername) {
         String checkGradeQuery = "SELECT COUNT(*) AS count FROM " + subject + " WHERE student_username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery)) {
@@ -486,7 +488,7 @@ public class AcademicResourceManagementSystem {
             return false;  // Return false in case of an error
         }
     }
-
+// method that upload grade
     private static void uploadGrade(Connection connection) {
         try (Scanner scanner = new Scanner(System.in)) {
             String subject;
@@ -531,7 +533,7 @@ public class AcademicResourceManagementSystem {
         }
     }
 
-
+// method used for uploading grade to database
     private static void uploadGradeToDatabase(Connection connection, String subject, String studentUsername, double mark) {
         try {
             // Check if the grade already exists for the same username and subject
@@ -559,7 +561,7 @@ public class AcademicResourceManagementSystem {
             System.out.println("Error checking/updating grade in the database");
         }
     }
-
+// a method that update grade
     private static void updateGrade(Connection connection, String subject, String studentUsername, double mark) {
         // Calculate grade based on the provided criteria
         String grade = calculateGrade(mark);
@@ -577,7 +579,7 @@ public class AcademicResourceManagementSystem {
         }
     }
 
-
+// a method that calculate student grade
     private static String calculateGrade(double mark) {
         if (mark < 0 || mark > 100) {
             return "Your mark should be between 0 and 100. Please re-enter.";
@@ -603,7 +605,7 @@ public class AcademicResourceManagementSystem {
             return "F";
         }
     }
-
+// method that display student grade
     private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
         // Query to get grades for the specified student and subject
         String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
