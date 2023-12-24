@@ -5,7 +5,6 @@ import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -29,41 +28,54 @@ public class AcademicResourceManagementSystem {
                 String dbUser = scanner.nextLine();
 
                 System.out.println("Please, Enter your database password:");
+                System.out.println(">>");
                 String dbPassword = scanner.nextLine();
 
                 Connection connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
-                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC RESOURCE MANAGEMENT SYSTEM!");
-                System.out.println("----------------------------------------------------------------");
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("\tTHIS IS HARAMAYA UNIVERSITY ACADEMIC SYSTEM!");
+                System.out.println("------------------------------------------------------");
+
                 String userType = null;
                 boolean validUserType = false;
 
-                while (!validUserType) {
+                while (!validUserType)
+                {
                     System.out.println("Are you a student or a teacher?");
                     System.out.print("==>>");
                     userType = scanner.nextLine();
 
-                    if ("student".equalsIgnoreCase(userType) || "teacher".equalsIgnoreCase(userType)) {
+                    //checking whether student or teacher
+                    if ("student".equalsIgnoreCase(userType) || "teacher".equalsIgnoreCase(userType))
+                    {
                         validUserType = true;
-                    } else {
+                    }
+                     else
+                    {
                         System.out.println("Invalid user type. Please Re-enter 'student' or 'teacher'.");
                     }
                 }
 
-                if ("student".equalsIgnoreCase(userType)) {
+                if ("student".equalsIgnoreCase(userType))
+                {
                     // Student Functionality
                     int studentChoice = 0;
 
-                    while (studentChoice != 5) {
+                    while (studentChoice != 5)
+                    {
                         System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\n5. Exit\nEnter your choice:");
 
-                        while (!scanner.hasNextInt()) {
+                        while (!scanner.hasNextInt())
+                        {
                             System.out.println("Invalid choice. Please enter a number.");
-                            scanner.next(); // Clear the invalid input from the scanner
+
+                            // Clear the invalid input from the scanner
+                            scanner.next();
                         }
 
                         studentChoice = scanner.nextInt();
 
+                                // giving choices for student
                         switch (studentChoice) {
                             case 1:
                                 System.out.println("Student Registration ");
