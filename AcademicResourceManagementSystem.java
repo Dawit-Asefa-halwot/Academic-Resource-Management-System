@@ -586,16 +586,21 @@ public class AcademicResourceManagementSystem
 
 
     // method that check if grade exit or not
-    private static boolean isGradeExists(Connection connection, String subject, String studentUsername) {
+    private static boolean isGradeExists(Connection connection, String subject, String studentUsername)
+    {
         String checkGradeQuery = "SELECT COUNT(*) AS count FROM " + subject + " WHERE student_username = ?";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery))
+        {
             preparedStatement.setString(1, studentUsername);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            try (ResultSet resultSet = preparedStatement.executeQuery())
+            {
                 resultSet.next();
                 int count = resultSet.getInt("count");
                 return count > 0;
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             // Use System.err to print the error message to the error stream
             System.err.println("Error checking if grade exists: " + e.getMessage());
 
@@ -607,27 +612,36 @@ public class AcademicResourceManagementSystem
     }
 
     // method that upload grade
-    private static void uploadGrade(Connection connection) {
-        try (Scanner scanner = new Scanner(System.in)) {
+    private static void uploadGrade(Connection connection)
+    {
+        try (Scanner scanner = new Scanner(System.in))
+        {
             String subject;
             String studentUsername;
 
             // Continue asking for input until "exit" is entered
             while (true) {
                 System.out.println("Enter the subject (type 'exit' to finish):");
+                System.out.print(">>");
                 subject = scanner.next();
 
-                if ("exit".equalsIgnoreCase(subject)) {
+                if ("exit".equalsIgnoreCase(subject))
+                {
                     break; // Exit the loop if "exit" is entered
                 }
 
                 System.out.println("Enter the student username:");
+                System.out.print(">>");
                 studentUsername = scanner.next();
 
-                try {
-                    if (isStudentExists(connection, studentUsername)) {
+                try
+                {
+                    if (isStudentExists(connection, studentUsername))
+                    {
                         // Store grade in the database
                         System.out.println("Enter the grade:");
+                        System.out.print(">>");
+
                         double mark = scanner.nextDouble();
 
                         // Move the consumption of the newline character here
@@ -635,10 +649,14 @@ public class AcademicResourceManagementSystem
 
                         uploadGradeToDatabase(connection, subject, studentUsername, mark);
                         System.out.println("Grade uploaded successfully!");
-                    } else {
+                    }
+                    else
+                    {
                         System.out.println("Student with the username " + studentUsername + " not found.");
                     }
-                } catch (SQLException e) {
+                }
+                catch (SQLException e)
+                {
                     // Use System.err to print the error message to the error stream
                     System.err.println("Error checking if student exists: " + e.getMessage());
 
@@ -656,20 +674,25 @@ public class AcademicResourceManagementSystem
 
 
     // method used for uploading grade to database
-    private static void uploadGradeToDatabase(Connection connection, String subject, String studentUsername, double mark) {
-        try {
+    private static void uploadGradeToDatabase(Connection connection, String subject, String studentUsername, double mark)
+    {
+        try
+        {
             // Check if the grade already exists for the same username and subject
-            if (isGradeExists(connection, subject, studentUsername)) {
+            if (isGradeExists(connection, subject, studentUsername))
+            {
                 // Update the existing grade
                 updateGrade(connection, subject, studentUsername, mark);
                 System.out.println("Grade updated successfully!");
-            } else {
+            } else
+            {
                 // Calculate grade based on the provided criteria
                 String grade = calculateGrade(mark);
 
                 // Store grade in the respective subject table
                 String insertGradeQuery = "INSERT INTO " + subject + " (subject_name, student_username, mark, grade) VALUES (?, ?, ?, ?)";
-                try (PreparedStatement preparedStatement = connection.prepareStatement(insertGradeQuery)) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement(insertGradeQuery))
+                {
                     preparedStatement.setString(1, subject);
                     preparedStatement.setString(2, studentUsername);
                     preparedStatement.setDouble(3, mark);
@@ -678,7 +701,9 @@ public class AcademicResourceManagementSystem
                     System.out.println("Grade uploaded successfully!");
                 }
             }
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex)
+        {
             // Use System.err to print the error message to the error stream
             System.err.println("Error checking/updating grade in the database: " + ex.getMessage());
 
