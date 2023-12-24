@@ -31,8 +31,6 @@ public class AcademicResourceManagementSystem {
                 System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC RESOURCE MANAGEMENT SYSTEM!");
                 System.out.println("----------------------------------------------------------------");
-                System.out.println("Are you a student or a teacher?");
-                System.out.print("==>>");
                 String userType = null;
                 boolean validUserType = false;
 
@@ -64,12 +62,12 @@ public class AcademicResourceManagementSystem {
 
                         switch (studentChoice) {
                             case 1:
-                                System.out.println("Student Registration - Enter your username:");
+                                System.out.println("Student Registration ");
+                                System.out.println("Enter your username:");
                                 username = scanner.next();
                                 System.out.println("Enter your password:");
                                 String password = scanner.next();
                                 registerStudent(connection, username, password);
-                                System.out.println("Registration successful!");
                                 break;
 
                             case 2:
@@ -106,7 +104,6 @@ public class AcademicResourceManagementSystem {
                                         case 2:
                                             // Display Assignment Schedule (implement logic)
                                             viewAssignmentScheduleForStudent(connection);
-                                            System.out.println("Assignment Schedule functionality is not implemented yet.");
                                             break;
 
                                         case 3:
