@@ -10,25 +10,29 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class AcademicResourceManagementSystem {
+public class AcademicResourceManagementSystem
+{
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/university_system";
 
     private static final Scanner scanner = new Scanner(System.in);
     private static final int MAX_LOGIN_ATTEMPTS = 2;
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         int loginAttempts = 0;
         String username = null;  // Declare the username variable outside the block
-        do {
-            try {
+        do
+        {
+            try
+            {
                 System.out.println("***++++******+++++********++++++++*******+++++++*****++++*********");
                 System.out.println(" \tWELCOME TO ACADEMIC RESOURCE MANAGEMENT SYSTEM PROGRAM!");
                 System.out.println("***++++******+++++********++++++++*******+++++++*****++++*********");
                 System.out.println("Please, Enter your database username");
-                System.out.println(">>");
+                System.out.print(">>");
                 String dbUser = scanner.nextLine();
 
                 System.out.println("Please, Enter your database password:");
-                System.out.println(">>");
+                System.out.print(">>");
                 String dbPassword = scanner.nextLine();
 
                 Connection connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
@@ -76,42 +80,64 @@ public class AcademicResourceManagementSystem {
                         studentChoice = scanner.nextInt();
 
                                 // giving choices for student
-                        switch (studentChoice) {
+                        switch (studentChoice)
+                        {
                             case 1:
-                                System.out.println("Student Registration ");
+                                //Student Registration
+                                System.out.println("-----------------------------------------");
+                                System.out.println("\tStudent Registration is in going...! ");
+                                System.out.println("_________________________________________");
                                 System.out.println("Enter your username:");
+                                System.out.print(">>");
                                 username = scanner.next();
                                 System.out.println("Enter your password:");
+                                System.out.print(">>");
                                 String password = scanner.next();
                                 registerStudent(connection, username, password);
                                 break;
 
+                                   // See Schedule for Student
                             case 2:
-                                // See Schedule for Student
+
                                 boolean scheduleExit = false;
 
-                                while (!scheduleExit) {
+                                //checking the existence of schedule
+                                while (!scheduleExit)
+                                {
                                     System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Exit\nEnter your choice:");
+                                    System.out.println("Enter your choice");
+                                    System.out.print(">>");
 
                                     int scheduleType = 0;
                                     boolean validScheduleChoice = false;
 
-                                    do {
-                                        while (!scanner.hasNextInt()) {
+                                    do
+                                    {
+                                        while (!scanner.hasNextInt())
+                                        {
                                             System.out.println("Invalid choice. Please enter a number.");
-                                            scanner.next(); // Clear the invalid input from the scanner
+
+                                            // Clear the invalid input from the scanner
+                                            scanner.next();
                                         }
 
                                         scheduleType = scanner.nextInt();
 
-                                        if (scheduleType >= 1 && scheduleType <= 4) {
+                                        if (scheduleType >= 1 && scheduleType <= 4)
+                                        {
                                             validScheduleChoice = true;
-                                        } else {
-                                            System.out.println("Invalid choice. Please enter a number between 1 and 4.");
                                         }
-                                    } while (!validScheduleChoice);
+                                        else
+                                        {
+                                            System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                                            System.out.print(">>");
+                                        }
+                                    }
+                                    while (!validScheduleChoice);
 
-                                    switch (scheduleType) {
+                                    //schedule type
+                                    switch (scheduleType)
+                                    {
                                         case 1:
                                             // Display Class Schedule
                                             viewClassScheduleForStudent(connection);
@@ -142,6 +168,7 @@ public class AcademicResourceManagementSystem {
                             case 3:
                                 // See Grade
                                 System.out.println("Enter your username:");
+                                System.out.print(">>");
                                 username = scanner.next();
                                 viewGradesForStudent(connection, username);
                                 break;
