@@ -298,18 +298,24 @@ public class AcademicResourceManagementSystem
     }
 
     //viewing class schedule for students
-    private static void viewClassScheduleForStudent(Connection connection) throws SQLException {
+    private static void viewClassScheduleForStudent(Connection connection) throws SQLException
+    {
         // Implement logic to retrieve and display class schedule for students from the database
         // Use PreparedStatement to execute queries
         String selectClassScheduleQuery = "SELECT subject, days, class_time FROM class_schedule";
         try (PreparedStatement preparedStatement = connection.prepareStatement(selectClassScheduleQuery);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+             ResultSet resultSet = preparedStatement.executeQuery())
+        {
             System.out.println("Class Schedule:");
-            if (!resultSet.isBeforeFirst()) {
+            if (!resultSet.isBeforeFirst())
+            {
                 System.out.println("No class schedule found.");
-            } else {
+            }
+            else
+            {
                 System.out.printf("%-15s %-15s %-15s%n", "Subject", "Days", "Class Time");
-                while (resultSet.next()) {
+                while (resultSet.next())
+                {
                     String subject = resultSet.getString("subject");
                     String classDate = resultSet.getString("days");
                     String classTime = resultSet.getString("class_time");
@@ -318,18 +324,23 @@ public class AcademicResourceManagementSystem
             }
         }
     }
-    private static void viewAssignmentScheduleForStudent(Connection connection) {
-        try {
+    // students are view their assignment schedule by this method
+    private static void viewAssignmentScheduleForStudent(Connection connection)
+    {
+        try
+        {
             // Perform a SELECT query to retrieve assignment schedule from the database
             String query = "SELECT * FROM Assignment_Schedule";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-                 ResultSet resultSet = preparedStatement.executeQuery()) {
+                 ResultSet resultSet = preparedStatement.executeQuery())
+            {
 
                 // Display the assignment schedule in a table form
                 System.out.printf("%-15s %-15s %-15s%n", "Subject", "Start Date", "Deadline");
                 System.out.println("--------------------------------------------------");
 
-                while (resultSet.next()) {
+                while (resultSet.next())
+                {
                     String subject = resultSet.getString("subject");
                     String startDate = resultSet.getString("start_date");
                     String deadline = resultSet.getString("deadline");
@@ -337,18 +348,22 @@ public class AcademicResourceManagementSystem
                     System.out.printf("%-15s %-15s %-15s%n", subject, startDate, deadline);
                 }
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             e.printStackTrace();
             System.out.println("Error fetching assignment schedule");
         }
     }
 
 
-
-    private static void uploadExamSchedule(Connection connection) {
+// The teacher upload exam method
+    private static void uploadExamSchedule(Connection connection)
+    {
         Scanner scanner = new Scanner(System.in);
 
-        try {
+        try
+        {
             // Get input from the user
             System.out.println("Enter subject:");
             String subject = scanner.nextLine();
@@ -365,31 +380,42 @@ public class AcademicResourceManagementSystem
 
             // Prepare and execute SQL statement to insert data into exam_schedule table
             String insertQuery = "INSERT INTO exam_schedule (subject, exam_name, exam_date, exam_time) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery))
+            {
                 preparedStatement.setString(1, subject);
                 preparedStatement.setString(2, examName);
                 preparedStatement.setDate(3, Date.valueOf(examDate));
                 preparedStatement.setString(4, examTime);
 
                 int rowsAffected = preparedStatement.executeUpdate();
-                if (rowsAffected > 0) {
+                if (rowsAffected > 0)
+                {
                     System.out.println("Exam schedule uploaded successfully.");
-                } else {
+                }
+                else
+                {
                     System.out.println("Failed to upload exam schedule.");
                 }
             }
-        } catch (SQLException | DateTimeParseException e) {
+        }
+        catch (SQLException | DateTimeParseException e)
+        {
             e.printStackTrace();
             System.out.println("Error uploading exam schedule.");
-        } finally {
+        }
+        finally
+        {
             scanner.close();
         }
     }
-
-    private static void viewGradesForStudent(Connection connection, String studentUsername) {
-        try {
+// students view their grade
+    private static void viewGradesForStudent(Connection connection, String studentUsername)
+    {
+        try
+        {
             // Check if the student username exists in the users table
-            if (isStudentExists(connection, studentUsername)) {
+            if (isStudentExists(connection, studentUsername))
+            {
                 // Display grades for the specified student
                 System.out.println("Grades for Student " + studentUsername + ":");
 
@@ -400,14 +426,19 @@ public class AcademicResourceManagementSystem
                 System.out.printf("%-20s %-10s %-10s%n", "Subject", "Mark", "Grade");
                 System.out.println("--------------------------------------------");
 
-                for (String subject : subjects) {
+                for (String subject : subjects)
+                {
                     // Display grades for each subject
                     displayGrades(connection, studentUsername, subject);
                 }
-            } else {
+            }
+            else
+            {
                 System.out.println("Student with the username " + studentUsername + " not found.");
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             // Use System.err to print the error message to the error stream
             System.err.println("Error retrieving grades from the database: " + e.getMessage());
 
@@ -416,12 +447,14 @@ public class AcademicResourceManagementSystem
         }
     }
 
-
-    private static boolean isStudentExists(Connection connection, String username) throws SQLException {
+//the existence of students
+    private static boolean isStudentExists(Connection connection, String username) throws SQLException
+    {
         String checkUserQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND role = 'student'";
         try (PreparedStatement preparedStatement = connection.prepareStatement(checkUserQuery)) {
             preparedStatement.setString(1, username);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            try (ResultSet resultSet = preparedStatement.executeQuery())
+            {
                 resultSet.next();
                 int count = resultSet.getInt("count");
                 return count > 0;
@@ -429,19 +462,23 @@ public class AcademicResourceManagementSystem
         }
     }
 
-
-    private static void viewExamScheduleForStudent(Connection connection) {
-        try {
+//students view their exam schedule
+    private static void viewExamScheduleForStudent(Connection connection)
+    {
+        try
+        {
             // Perform a SELECT query to retrieve exam schedule from the database
             String query = "SELECT * FROM exam_schedule";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-                 ResultSet resultSet = preparedStatement.executeQuery()) {
+                 ResultSet resultSet = preparedStatement.executeQuery())
+            {
 
                 // Display the exam schedule in a table form
                 System.out.printf("%-15s %-15s %-15s %-15s%n", "Subject", "Exam Name", "Exam Date", "Exam Time");
                 System.out.println("-----------------------------------------------------------");
 
-                while (resultSet.next()) {
+                while (resultSet.next())
+                {
                     String subject = resultSet.getString("subject");
                     String examName = resultSet.getString("exam_name");
                     String examDate = resultSet.getString("exam_date");
@@ -450,7 +487,9 @@ public class AcademicResourceManagementSystem
                     System.out.printf("%-15s %-15s %-15s %-15s%n", subject, examName, examDate, examTime);
                 }
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e)
+        {
             // Use System.err to print the error message to the error stream
             System.err.println("Error fetching exam schedule: " + e.getMessage());
 
@@ -460,7 +499,8 @@ public class AcademicResourceManagementSystem
     }
 
 
-    private static void registerStudent(Connection connection, String username, String password) throws SQLException {
+    private static void registerStudent(Connection connection, String username, String password) throws SQLException
+    {
         String insertUserQuery = "INSERT INTO users (username, password, role) VALUES (?, ?, 'student')";
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertUserQuery)) {
             preparedStatement.setString(1, username);
@@ -471,9 +511,11 @@ public class AcademicResourceManagementSystem
     }
 
 
-
-    private static void uploadClassSchedule(Connection connection) {
-        try (Scanner scanner = new Scanner(System.in)) {
+// teacher upload class schedule
+    private static void uploadClassSchedule(Connection connection)
+    {
+        try (Scanner scanner = new Scanner(System.in))
+        {
             System.out.println("Enter the subject:");
             String subject = scanner.nextLine();
 
@@ -494,7 +536,8 @@ public class AcademicResourceManagementSystem
                 preparedStatement.setInt(4, 1);
                 preparedStatement.executeUpdate();
                 System.out.println("Class schedule uploaded successfully!");
-            } catch (SQLException e) {
+            } catch (SQLException e)
+            {
                 // Use System.err to print the error message to the error stream
                 System.err.println("Error uploading class schedule to the database: " + e.getMessage());
 
@@ -506,9 +549,10 @@ public class AcademicResourceManagementSystem
     }
 
 
+//teacher upload assignment schedule
 
-
-    private static void uploadAssignmentSchedule(Connection connection) {
+    private static void uploadAssignmentSchedule(Connection connection)
+    {
         Scanner scanner = new Scanner(System.in);
 
         try {
@@ -550,8 +594,9 @@ public class AcademicResourceManagementSystem
         }
     }
 
-
-    private static void uploadMaterial(Connection connection) {
+//teacher upload materials
+    private static void uploadMaterial(Connection connection)
+    {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Enter the subject:");
             String subject = scanner.nextLine();
@@ -577,7 +622,7 @@ public class AcademicResourceManagementSystem
             }
         }
     }
-
+//students view materials
     private static void viewMaterials(Connection connection) {
         // Implement logic to retrieve and display materials from the database
         String selectMaterialsQuery = "SELECT subject, material_name FROM materials";
