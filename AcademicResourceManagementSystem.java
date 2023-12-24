@@ -1,4 +1,11 @@
-
+/*
+name of group members
+1. Dawit asefa
+2. Abadanaf chala
+3. Abdi biya
+4. Elias Wakgari
+5. Daniel tigistu
+ */
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -104,7 +111,7 @@ public class AcademicResourceManagementSystem
                                 //checking the existence of schedule
                                 while (!scheduleExit)
                                 {
-                                    System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Exit\nEnter your choice:");
+                                    System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Exit");
                                     System.out.println("Enter your choice");
                                     System.out.print(">>");
 
@@ -194,7 +201,7 @@ public class AcademicResourceManagementSystem
 
                     while (teacherChoice != 4)
                     {
-                        System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4. Exit\nEnter your choice:");
+                        System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4. Exit");
                         System.out.println("Enter your choice:");
                         System.out.print(">>");
 
@@ -218,7 +225,7 @@ public class AcademicResourceManagementSystem
                                 //checking teacher choices existence
                                 while (scheduleChoice != 4)
                                 {
-                                    System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n4. Exit\nEnter your choice:");
+                                    System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n4. Exit");
                                     System.out.println("Enter your choice:");
                                     System.out.print(">>");
 
