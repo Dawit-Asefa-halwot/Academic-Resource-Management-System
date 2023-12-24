@@ -1,5 +1,16 @@
 # Project Name: Academic Resource Management System
 
+CONTRUBUTERS
+
+NAME                  
+
+DANIEL TIGISTU                 
+ABDIBIYA  ABADURA
+ELIAS WAKGARI
+ABADANAF CHALA
+DAWIT ASEFA
+
+
 ## Introduction Academic Resource Management System! 
 This project aims to provide a comprehensive solution for managing academic resources at Haramaya University.
 
