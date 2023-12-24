@@ -21,10 +21,14 @@ public class AcademicResourceManagementSystem {
         String username = null;  // Declare the username variable outside the block
         do {
             try {
-                System.out.println("Enter database username:");
+                System.out.println("***++++******+++++********++++++++*******+++++++*****++++*********");
+                System.out.println(" \tWELCOME TO ACADEMIC RESOURCE MANAGEMENT SYSTEM PROGRAM!");
+                System.out.println("***++++******+++++********++++++++*******+++++++*****++++*********");
+                System.out.println("Please, Enter your database username");
+                System.out.println(">>");
                 String dbUser = scanner.nextLine();
 
-                System.out.println("Enter database password:");
+                System.out.println("Please, Enter your database password:");
                 String dbPassword = scanner.nextLine();
 
                 Connection connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
