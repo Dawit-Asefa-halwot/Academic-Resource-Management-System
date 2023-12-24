@@ -1,4 +1,8 @@
-Academic Resource Management System
+# Project Name: Academic Resource Management System
+
+## Introduction Academic Resource Management System! 
+This project aims to provide a comprehensive solution for managing academic resources at Haramaya University.
+
 This Java application is an Academic Resource Management System for Haramaya University.
 It provides functionality for both students and teachers to interact with the academic resources of the university.
 The system uses a MySQL database for data storage, and the JDBC API for Java is employed for database connectivity.
@@ -13,8 +17,8 @@ Java Development Kit (JDK)
 MySQL Server
 MySQL Connector/J (JDBC Driver)
 
-How to Run
-## How to Use
+
+## How to Run
 
 1) Database Setup
 To set up the database for the project, use the  SQL code we provided:
@@ -32,15 +36,13 @@ To set up the database for the project, use the  SQL code we provided:
    - Uploading materials (teachers only)
 
 ## Notes
-- This project is a command-line application.
 - The provided code require additional development such as workbench username and password to implement all features.
 - The project uses a relational database (MySQL) to store data.
-
-Ensure that the MySQL Server is running and accessible.
-Set up the database by executing the SQL scripts provided in the database_scripts folder.
-enter the you databse username and password
-if you enter incorrect username and password the system gives yo second chance if you again enter incorrect password the system exits autuomatically
-Compile and run the AcademicResourceManagementSystem class.
+- Ensure that the MySQL Server is running and accessible.
+- Set up the database by executing the SQL scripts provided in the database_scripts folder.
+- enter the you databse username and password
+- if you enter incorrect username and password the system gives yo second chance if you again enter incorrect password the system exits autuomatically
+- Compile and run the AcademicResourceManagementSystem class.
 
 Features
 
