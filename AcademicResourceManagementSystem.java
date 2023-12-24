@@ -11,10 +11,11 @@ public class AcademicResourceManagementSystem {
 
     private static Connection connection;
     private static Scanner scanner = new Scanner(System.in);
-
+    private static final int MAX_LOGIN_ATTEMPTS = 2;
     public static void main(String[] args) {
         String username = null;  // Declare the username variable outside the block
-
+        int loginAttempts = 0;
+        do {
         try {
             System.out.println("Enter database username:");
             String dbUser = scanner.nextLine();
@@ -179,15 +180,20 @@ public class AcademicResourceManagementSystem {
                 System.out.println("Invalid user type");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Database connection error");
-        } finally {
-            // Close the scanner in the finally block to ensure it's always closed
-            if (scanner != null) {
-                scanner.close();
+            loginAttempts++;
+            System.out.println("Invalid username or password. Please try again.");
+
+            if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
+                System.out.println("Maximum login attempts reached. Exiting...");
+                System.exit(0);
             }
         }
+        } while (loginAttempts < MAX_LOGIN_ATTEMPTS);
+
+        // Close the scanner in the finally block to ensure it's always closed
+        scanner.close();
     }
+
 
     private static void viewClassScheduleForStudent(Connection connection) throws SQLException {
         // Implement logic to retrieve and display class schedule for students from the database
