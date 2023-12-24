@@ -8,12 +8,13 @@ import java.util.Scanner;
 
 public class AcademicResourceManagementSystem {
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/university_system";
-    private static final Scanner scanner = new Scanner(System.in);
-    private static final int MAX_LOGIN_ATTEMPTS = 2;
+
+    private static Connection connection;
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        int loginAttempts = 0;
         String username = null;  // Declare the username variable outside the block
-        do {
+
         try {
             System.out.println("Enter database username:");
             String dbUser = scanner.nextLine();
@@ -21,18 +22,15 @@ public class AcademicResourceManagementSystem {
             System.out.println("Enter database password:");
             String dbPassword = scanner.nextLine();
 
-            Connection connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
+            connection = DriverManager.getConnection(JDBC_URL, dbUser, dbPassword);
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             System.out.println("\tWELCOME TO HARAMAYA UNIVERSITY ACADEMIC RESOURCE MANAGEMENT SYSTEM!");
             System.out.println("----------------------------------------------------------------");
             System.out.println("Are you a student or a teacher?");
             System.out.print("==>>");
-            String userType = null;
+            String userType;
             boolean validUserType = false;
-
-            while (!validUserType) {
-                System.out.println("Are you a student or a teacher?");
-                System.out.print("==>>");
+            do {
                 userType = scanner.nextLine();
 
                 if ("student".equalsIgnoreCase(userType) || "teacher".equalsIgnoreCase(userType)) {
@@ -40,48 +38,35 @@ public class AcademicResourceManagementSystem {
                 } else {
                     System.out.println("Invalid user type. Please Re-enter 'student' or 'teacher'.");
                 }
-            }
+            } while (!validUserType);
 
             if ("student".equalsIgnoreCase(userType)) {
                 // Student Functionality
-                int studentChoice = 0;
+                System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\nEnter your choice:");
+                int studentChoice = scanner.nextInt();
 
-                while (studentChoice != 5) {
-                    System.out.println("1. Register\n2. See Schedule\n3. See Grade\n4. See Material\n5. Exit\nEnter your choice:");
+                switch (studentChoice) {
+                    case 1:
+                        System.out.println("Student Registration - Enter your username:");
+                        username = scanner.next();
+                        System.out.println("Enter your password:");
+                        String password = scanner.next();
+                        registerStudent(connection, username, password);
+                        System.out.println("Registration successful!");
+                        break;
 
-                    while (!scanner.hasNextInt()) {
-                        System.out.println("Invalid choice. Please enter a number.");
-                        scanner.next(); // Clear the invalid input from the scanner
-                    }
+                    case 2:
+                        // See Schedule for Student
+                        boolean scheduleExit = false;
 
-                    studentChoice = scanner.nextInt();
+                        while (!scheduleExit) {
+                            System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Back\nEnter your choice:");
 
-                    switch (studentChoice) {
-                        case 1:
-                            System.out.println("Student Registration - Enter your username:");
-                            username = scanner.next();
-                            System.out.println("Enter your password:");
-                            String password = scanner.next();
-                            registerStudent(connection, username, password);
-                            System.out.println("Registration successful!");
-                            break;
+                            int scheduleType = 0;
+                            boolean validScheduleChoice = false;
 
-                        case 2:
-                            // See Schedule for Student
-                            boolean scheduleExit = false;
-
-                            while (!scheduleExit) {
-                                System.out.println("1. Class Schedule\n2. Assignment Schedule\n3. Exam Schedule\n4. Exit\nEnter your choice:");
-
-                                int scheduleType = 0;
-                                boolean validScheduleChoice = false;
-
-                                do {
-                                    while (!scanner.hasNextInt()) {
-                                        System.out.println("Invalid choice. Please enter a number.");
-                                        scanner.next(); // Clear the invalid input from the scanner
-                                    }
-
+                            do {
+                                if (scanner.hasNextInt()) {
                                     scheduleType = scanner.nextInt();
 
                                     if (scheduleType >= 1 && scheduleType <= 4) {
@@ -89,145 +74,119 @@ public class AcademicResourceManagementSystem {
                                     } else {
                                         System.out.println("Invalid choice. Please enter a number between 1 and 4.");
                                     }
-                                } while (!validScheduleChoice);
-
-                                switch (scheduleType) {
-                                    case 1:
-                                        // Display Class Schedule
-                                        viewClassScheduleForStudent(connection);
-                                        break;
-
-                                    case 2:
-                                        // Display Assignment Schedule (implement logic)
-                                        viewAssignmentScheduleForStudent(connection);
-                                        System.out.println("Assignment Schedule functionality is not implemented yet.");
-                                        break;
-
-                                    case 3:
-                                        // Display Exam Schedule (implement logic)
-                                        viewExamScheduleForStudent(connection);
-                                        break;
-
-                                    case 4:
-                                        // Go back
-                                        scheduleExit = true;
-                                        break;
-
-                                    default:
-                                        System.out.println("Invalid choice");
-                                }
-                            }
-
-                            break;
-
-                        case 3:
-                            // See Grade
-                            System.out.println("Enter your username:");
-                            username = scanner.next();
-                            viewGradesForStudent(connection, username);
-                            break;
-
-                        case 4:
-                            // See Material
-                            viewMaterials(connection);
-                            break;
-
-                        case 5:
-                            System.out.println("Exiting...");
-                            break;
-
-                        default:
-                            System.out.println("Invalid choice");
-                    }
-                }
-            }
-            else if ("teacher".equalsIgnoreCase(userType)) {
-                // Teacher Functionality
-                int teacherChoice = 0;
-
-                while (teacherChoice != 4) {
-                    System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\n4. Exit\nEnter your choice:");
-
-                    while (!scanner.hasNextInt()) {
-                        System.out.println("Invalid choice. Please enter a number.");
-                        scanner.next(); // Clear the invalid input from the scanner
-                    }
-
-                    teacherChoice = scanner.nextInt();
-
-                    switch (teacherChoice) {
-                        case 1:
-                            // Upload Schedule
-                            int scheduleChoice = 0;
-
-                            while (scheduleChoice != 4) {
-                                System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n4. Exit\nEnter your choice:");
-
-                                while (!scanner.hasNextInt()) {
-                                    System.out.println("Invalid choice. Please enter a number.");
+                                } else {
+                                    System.out.println("Invalid input. Please enter a number between 1 and 4.");
                                     scanner.next(); // Clear the invalid input from the scanner
                                 }
+                            } while (!validScheduleChoice);
 
-                                scheduleChoice = scanner.nextInt();
+                            switch (scheduleType) {
+                                case 1:
+                                    // Display Class Schedule
+                                    viewClassScheduleForStudent(connection);
+                                    break;
 
-                                switch (scheduleChoice) {
-                                    case 1:
-                                        // Upload Class Schedule
-                                        uploadClassSchedule(connection);
-                                        break;
+                                case 2:
+                                    // Display Assignment Schedule (implement logic)
+                                    viewAssignmentScheduleForStudent(connection);
+                                    System.out.println("Assignment Schedule functionality is not implemented yet.");
+                                    break;
 
-                                    case 2:
-                                        // Upload Assignment Schedule
-                                        uploadAssignmentSchedule(connection);
-                                        break;
+                                case 3:
+                                    // Display Exam Schedule (implement logic)
+                                    viewExamScheduleForStudent(connection);
 
-                                    case 3:
-                                        // Upload Exam Schedule
-                                        uploadExamSchedule(connection);
-                                        break;
+                                    break;
 
-                                    case 4:
-                                        System.out.println("Exiting...");
-                                        break;
+                                case 4:
+                                    // Go back
+                                    scheduleExit = true;
+                                    break;
 
-                                    default:
-                                        System.out.println("Invalid choice");
-                                }
+                                default:
+                                    System.out.println("Invalid choice");
                             }
-                            break;
+                        }
 
-                        case 2:
-                            // Upload Grade
-                            uploadGrade(connection);
-                            break;
 
-                        case 3:
-                            uploadMaterial(connection);
-                            break;
 
-                        case 4:
-                            System.out.println("Exiting...");
-                            break;
+                        break;
 
-                        default:
-                            System.out.println("Invalid choice");
-                    }
+                    case 3:
+                        // See Grade
+                        System.out.println("Enter your username:");
+                        username = scanner.next();
+                        viewGradesForStudent(connection, username);
+
+                        break;
+
+                    case 4:
+                        // See Material
+                        viewMaterials(connection);
+
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice");
+                }
+            } else if ("teacher".equalsIgnoreCase(userType)) {
+                // Teacher Functionality
+                System.out.println("1. Upload Schedule\n  1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\n2. Upload Grade\n3. Upload Material\nEnter your choice:");
+                int teacherChoice = scanner.nextInt();
+
+
+                switch (teacherChoice) {
+                    case 1:
+                        // Upload Schedule
+                        System.out.println("1. Upload Class Schedule\n  2. Upload Assignment Schedule\n  3. Upload Exam Schedule\nEnter your choice:");
+                        int scheduleChoice = scanner.nextInt();
+
+                        switch (scheduleChoice) {
+                            case 1:
+                                // Upload Class Schedule
+                                uploadClassSchedule(connection);
+
+                                break;
+
+                            case 2:
+                                // Upload Assignment Schedule
+                                uploadAssignmentSchedule(connection);
+                                break;
+
+                            case 3:
+                                // Upload Exam Schedule
+                                uploadExamSchedule(connection);
+                                break;
+
+                            default:
+                                System.out.println("Invalid choice");
+                        }
+                        break;
+
+                    case 2:
+                        // Upload Grade
+                        uploadGrade(connection);
+                        break;
+
+                    case 3:
+                        uploadMaterial(connection);
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice");
                 }
             } else {
                 System.out.println("Invalid user type");
             }
         } catch (SQLException e) {
-                loginAttempts++;
-                System.out.println("Invalid username or password. Please try again.");
-            if (loginAttempts >= MAX_LOGIN_ATTEMPTS) {
-                System.out.println("Maximum login attempts reached. Exiting...");
-                System.exit(0);
+            e.printStackTrace();
+            System.out.println("Database connection error");
+        } finally {
+            // Close the scanner in the finally block to ensure it's always closed
+            if (scanner != null) {
+                scanner.close();
             }
         }
-        } while (loginAttempts < MAX_LOGIN_ATTEMPTS);
-
-        // Close the scanner in the finally block to ensure it's always closed
-        scanner.close();
     }
 
     private static void viewClassScheduleForStudent(Connection connection) throws SQLException {
@@ -340,14 +299,10 @@ public class AcademicResourceManagementSystem {
                 System.out.println("Student with the username " + studentUsername + " not found.");
             }
         } catch (SQLException e) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error retrieving grades from the database: " + e.getMessage());
-
-            // Print the stack trace to standard error stream
-            e.printStackTrace(System.err);
+            e.printStackTrace();
+            System.out.println("Error retrieving grades from the database");
         }
     }
-
 
     private static boolean isStudentExists(Connection connection, String username) throws SQLException {
         String checkUserQuery = "SELECT COUNT(*) AS count FROM users WHERE username = ? AND role = 'student'";
@@ -364,12 +319,12 @@ public class AcademicResourceManagementSystem {
 
     private static void viewExamScheduleForStudent(Connection connection) {
         try {
-            // Perform a SELECT query to retrieve exam schedule from the database
+//        // Perform a SELECT query to retrieve exam schedule from the database
             String query = "SELECT * FROM exam_schedule";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query);
                  ResultSet resultSet = preparedStatement.executeQuery()) {
 
-                // Display the exam schedule in a table form
+//            // Display the exam schedule in a table form
                 System.out.printf("%-15s %-15s %-15s %-15s%n", "Subject", "Exam Name", "Exam Date", "Exam Time");
                 System.out.println("-----------------------------------------------------------");
 
@@ -383,11 +338,8 @@ public class AcademicResourceManagementSystem {
                 }
             }
         } catch (SQLException e) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error fetching exam schedule: " + e.getMessage());
-
-            // Print the stack trace to standard error stream
-            e.printStackTrace(System.err);
+            e.printStackTrace();
+            System.out.println("Error fetching exam schedule");
         }
     }
 
@@ -415,7 +367,8 @@ public class AcademicResourceManagementSystem {
             System.out.println("Enter the class time (HH:mm:ss):");
             String classTime = scanner.next();
 
-            // Store class schedule in the database
+
+// Store class schedule in the database
             String insertClassScheduleQuery = "INSERT INTO class_schedule (subject, days, class_time, user_id) VALUES (?, ?, ?, ?)";
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertClassScheduleQuery)) {
@@ -427,16 +380,11 @@ public class AcademicResourceManagementSystem {
                 preparedStatement.executeUpdate();
                 System.out.println("Class schedule uploaded successfully!");
             } catch (SQLException e) {
-                // Use System.err to print the error message to the error stream
-                System.err.println("Error uploading class schedule to the database: " + e.getMessage());
-
-                // Print the stack trace to standard error stream
-                e.printStackTrace(System.err);
+                e.printStackTrace();
                 System.out.println("Error uploading class schedule to the database");
             }
         }
     }
-
 
 
 
@@ -471,17 +419,12 @@ public class AcademicResourceManagementSystem {
                 }
             }
         } catch (SQLException | DateTimeParseException e) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error uploading assignment schedule: " + e.getMessage());
-
-            // Print the stack trace to standard error stream
-            e.printStackTrace(System.err);
+            e.printStackTrace();
             System.out.println("Error uploading assignment schedule.");
         } finally {
             scanner.close();
         }
     }
-
 
     private static void uploadMaterial(Connection connection) {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -500,16 +443,11 @@ public class AcademicResourceManagementSystem {
                 preparedStatement.executeUpdate();
                 System.out.println("Material uploaded successfully!");
             } catch (SQLException e) {
-                // Use System.err to print the error message to the error stream
-                System.err.println("Error uploading material to the database: " + e.getMessage());
-
-                // Print the stack trace to standard error stream
-                e.printStackTrace(System.err);
+                e.printStackTrace();
                 System.out.println("Error uploading material to the database");
             }
         }
     }
-
     private static void viewMaterials(Connection connection) {
         // Implement logic to retrieve and display materials from the database
         String selectMaterialsQuery = "SELECT subject, material_name FROM materials";
@@ -518,7 +456,7 @@ public class AcademicResourceManagementSystem {
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             System.out.println("Materials:");
-            System.out.printf("%-15s  %-15s%n", "Material Name", "Subject");
+            System.out.printf("%-15s  %-15s%n", "Material Name             ", "Subject");
             System.out.println("------------------------------------------------------");
 
             while (resultSet.next()) {
@@ -528,17 +466,10 @@ public class AcademicResourceManagementSystem {
                 System.out.printf("%-15s  %-15s%n", materialName, subject);
             }
         } catch (SQLException e) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error retrieving materials from the database: " + e.getMessage());
-
-            // Print the stack trace to standard error stream
-            e.printStackTrace(System.err);
+            e.printStackTrace();
             System.out.println("Error retrieving materials from the database");
         }
     }
-
-
-    // method that check if grade exit or not
     private static boolean isGradeExists(Connection connection, String subject, String studentUsername) {
         String checkGradeQuery = "SELECT COUNT(*) AS count FROM " + subject + " WHERE student_username = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(checkGradeQuery)) {
@@ -549,17 +480,12 @@ public class AcademicResourceManagementSystem {
                 return count > 0;
             }
         } catch (SQLException e) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error checking if grade exists: " + e.getMessage());
-
-            // Print the stack trace to standard error stream
-            e.printStackTrace(System.err);
+            e.printStackTrace();
             System.out.println("Error checking if grade exists");
             return false;  // Return false in case of an error
         }
     }
 
-    // method that upload grade
     private static void uploadGrade(Connection connection) {
         try (Scanner scanner = new Scanner(System.in)) {
             String subject;
@@ -587,16 +513,13 @@ public class AcademicResourceManagementSystem {
                         scanner.nextLine();
 
                         uploadGradeToDatabase(connection, subject, studentUsername, mark);
-                        System.out.println("Grade uploaded successfully!");
+                        // Print the message only once after successful grade upload
+                        // System.out.println("Grade uploaded successfully!");
                     } else {
                         System.out.println("Student with the username " + studentUsername + " not found.");
                     }
                 } catch (SQLException e) {
-                    // Use System.err to print the error message to the error stream
-                    System.err.println("Error checking if student exists: " + e.getMessage());
-
-                    // Print the stack trace to standard error stream
-                    e.printStackTrace(System.err);
+                    e.printStackTrace();
                     System.out.println("Error checking if student exists");
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter a valid value.");
@@ -608,7 +531,6 @@ public class AcademicResourceManagementSystem {
     }
 
 
-    // method used for uploading grade to database
     private static void uploadGradeToDatabase(Connection connection, String subject, String studentUsername, double mark) {
         try {
             // Check if the grade already exists for the same username and subject
@@ -632,16 +554,11 @@ public class AcademicResourceManagementSystem {
                 }
             }
         } catch (SQLException ex) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error checking/updating grade in the database: " + ex.getMessage());
-
-            // Print the stack trace to standard error stream
-            ex.printStackTrace(System.err);
+            ex.printStackTrace();
             System.out.println("Error checking/updating grade in the database");
         }
     }
 
-    // a method that update grade
     private static void updateGrade(Connection connection, String subject, String studentUsername, double mark) {
         // Calculate grade based on the provided criteria
         String grade = calculateGrade(mark);
@@ -654,17 +571,12 @@ public class AcademicResourceManagementSystem {
             preparedStatement.setString(3, studentUsername);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            // Use System.err to print the error message to the error stream
-            System.err.println("Error updating grade in the database: " + e.getMessage());
-
-            // Print the stack trace to standard error stream
-            e.printStackTrace(System.err);
+            e.printStackTrace();
             System.out.println("Error updating grade in the database");
         }
     }
 
 
-    // a method that calculate student grade
     private static String calculateGrade(double mark) {
         if (mark < 0 || mark > 100) {
             return "Your mark should be between 0 and 100. Please re-enter.";
@@ -690,7 +602,7 @@ public class AcademicResourceManagementSystem {
             return "F";
         }
     }
-    // method that display student grade
+
     private static void displayGrades(Connection connection, String studentUsername, String subject) throws SQLException {
         // Query to get grades for the specified student and subject
         String selectGradesQuery = "SELECT mark, grade FROM " + subject + " WHERE student_username = ?";
